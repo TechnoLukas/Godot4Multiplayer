@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnfqi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e7i3i"]
 resource_local_to_scene = true
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5ipbi"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_jnfqi")
+material = SubResource("StandardMaterial3D_e7i3i")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yabfh"]
 
@@ -153,6 +153,10 @@ properties/5/path = NodePath("SubViewport/window/nick:text")
 properties/5/spawn = true
 properties/5/sync = true
 properties/5/watch = false
+properties/6/path = NodePath("SubViewport/window/color:color")
+properties/6/spawn = true
+properties/6/sync = true
+properties/6/watch = false
 
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3htem")
@@ -216,6 +220,15 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="color" type="ColorRect" parent="SubViewport/window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.235294, 0.235294, 0.235294, 1)
 
 [node name="nick" type="Label" parent="SubViewport/window"]
 layout_mode = 1
