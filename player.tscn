@@ -1,0 +1,236 @@
+[gd_scene load_steps=14 format=3 uid="uid://cmaessyb06584"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_3htem"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6nh7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_b0c8g"]
+material = SubResource("StandardMaterial3D_l6nh7")
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yabfh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u6ugc"]
+albedo_color = Color(0.0156863, 0.0156863, 0.0156863, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5s6t3"]
+albedo_color = Color(0.223529, 0.223529, 0.223529, 1)
+
+[sub_resource type="Animation" id="Animation_nsie2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0.5, -0.4, -0.700001)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_b8h3t"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0.5, -0.4, -0.700001), Vector3(0.5, -0.365358, -0.700001)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(-2, -2),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0.173922, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3auxi"]
+resource_name = "shoot"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector3(0.5, -0.376148, -0.618344), Vector3(0.5, -0.4, -0.700001)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Pistol:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.5, 0.5),
+"update": 0,
+"values": [Vector3(0.648494, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_pnrlq"]
+resource_name = "walk"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Pistol:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.25, 0.5, 0.775),
+"transitions": PackedFloat32Array(0.5, 2, 0.5, 2),
+"update": 0,
+"values": [Vector3(0.5, -0.4, -0.700001), Vector3(0.42765, -0.343401, -0.700001), Vector3(0.5, -0.4, -0.700001), Vector3(0.588336, -0.331654, -0.700001)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ysr4l"]
+_data = {
+"RESET": SubResource("Animation_nsie2"),
+"idle": SubResource("Animation_b8h3t"),
+"shoot": SubResource("Animation_3auxi"),
+"walk": SubResource("Animation_pnrlq")
+}
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_ip2tl"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jvrmg"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/sync = true
+properties/0/watch = false
+properties/1/path = NodePath(".:rotation")
+properties/1/spawn = true
+properties/1/sync = true
+properties/1/watch = false
+properties/2/path = NodePath("Camera3D:rotation")
+properties/2/spawn = true
+properties/2/sync = true
+properties/2/watch = false
+properties/3/path = NodePath("AnimationPlayer:current_animation")
+properties/3/spawn = true
+properties/3/sync = true
+properties/3/watch = false
+properties/4/path = NodePath(".:visible")
+properties/4/spawn = true
+properties/4/sync = true
+properties/4/watch = false
+properties/5/path = NodePath("SubViewport/window/nick:text")
+properties/5/spawn = true
+properties/5/sync = true
+properties/5/watch = false
+
+[node name="player" type="CharacterBody3D"]
+script = ExtResource("1_3htem")
+
+[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_b0c8g")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_yabfh")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.947266, 0.320448, 0, -0.320448, 0.947266, 0, 2.37719, 1.82153)
+
+[node name="Pistol" type="Node3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, -0.700001)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Camera3D/Pistol"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.1)
+size = Vector3(0.104832, 0.0978091, 0.371398)
+material = SubResource("StandardMaterial3D_u6ugc")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Camera3D/Pistol/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0963947, 0.123627)
+size = Vector3(0.104832, 0.0978091, 0.0882163)
+material = SubResource("StandardMaterial3D_5s6t3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Camera3D")
+autoplay = "idle"
+playback_default_blend_time = 0.05
+libraries = {
+"": SubResource("AnimationLibrary_ysr4l")
+}
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = -22.0
+offset_right = 21.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 36
+text = "➕"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(87, 20)
+
+[node name="window" type="Control" parent="SubViewport"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="nick" type="Label" parent="SubViewport/window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "TEXT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FloatingWindow" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32308, 0)
+billboard = 2
+double_sided = false
+texture = SubResource("ViewportTexture_ip2tl")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_jvrmg")
