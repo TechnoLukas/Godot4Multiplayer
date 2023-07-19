@@ -2,10 +2,12 @@
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l6nh7"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jnfqi"]
+resource_local_to_scene = true
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_b0c8g"]
-material = SubResource("StandardMaterial3D_l6nh7")
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5ipbi"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_jnfqi")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yabfh"]
 
@@ -157,14 +159,14 @@ script = ExtResource("1_3htem")
 
 [node name="CSGMesh3D" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-mesh = SubResource("CapsuleMesh_b0c8g")
+mesh = SubResource("CapsuleMesh_5ipbi")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_yabfh")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.947266, 0.320448, 0, -0.320448, 0.947266, 0, 2.37719, 1.82153)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 
 [node name="Pistol" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, -0.700001)

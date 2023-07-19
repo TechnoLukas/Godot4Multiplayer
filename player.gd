@@ -19,7 +19,9 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	
-	set_player_prop.rpc()
+	
+	set_player_prop.rpc(Global.color,Global.nickname)
+	fltwd.get_node("nick").text=Global.nickname
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
 	visible=true
@@ -71,7 +73,7 @@ func play_shoot_effects():
 	anim_player.play("shoot")
 
 @rpc("call_local")
-func set_player_prop():
-	mesh.mesh.material.albedo_color=Global.color
-	fltwd.get_node("nick").text=Global.nickname
-		
+func set_player_prop(c,n):
+	
+	print(multiplayer.get_unique_id()," ",name)
+	mesh.mesh.material.albedo_color=c
