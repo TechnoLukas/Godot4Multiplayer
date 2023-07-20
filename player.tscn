@@ -2,12 +2,10 @@
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e7i3i"]
-resource_local_to_scene = true
-
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_5ipbi"]
 resource_local_to_scene = true
-material = SubResource("StandardMaterial3D_e7i3i")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7gs2w"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yabfh"]
 
@@ -157,6 +155,10 @@ properties/6/path = NodePath("SubViewport/window/color:color")
 properties/6/spawn = true
 properties/6/sync = true
 properties/6/watch = false
+properties/7/path = NodePath("CSGMesh3D:material")
+properties/7/spawn = true
+properties/7/sync = true
+properties/7/watch = false
 
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3htem")
@@ -164,6 +166,7 @@ script = ExtResource("1_3htem")
 [node name="CSGMesh3D" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_5ipbi")
+material = SubResource("StandardMaterial3D_7gs2w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

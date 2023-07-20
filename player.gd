@@ -22,8 +22,11 @@ func _ready():
 	
 	fltwd.get_node("nick").text=Global.nickname
 	fltwd.get_node("color").color=Global.color
+	#fltwd.get_node("nick").theme.set_color()
 	
-	print(mesh.mesh.material.albedo_color)
+	mesh.material.albedo_color=Global.color
+	#mesh.mesh.material.albedo_color=fltwd.get_node("color").color
+	print(mesh.material.albedo_color)
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
