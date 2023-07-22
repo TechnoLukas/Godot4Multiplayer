@@ -6,9 +6,15 @@ const JUMP_VELOCITY = 4.5
 
 @onready var mesh = $CSGMesh3D
 @onready var camera = $Camera3D
+@onready var camera_raycast = $Camera3D/raycast
 @onready var anim_player = $AnimationPlayer
+@onready var effect = $Camera3D/Pistol/GPUParticles3D
 
-@onready var fltwd = $SubViewport/window
+@onready var tagwd = $tagviewport/window
+@onready var invwd = $invwd
+@onready var invwd_ui = $invwd/UI/Control
+
+var invwd_rtshift = 0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -20,18 +26,14 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	
-	fltwd.get_node("nick").text=Global.nickname
-	fltwd.get_node("color").color=Global.color
-	#fltwd.get_node("nick").theme.set_color()
-	
-	mesh.material.albedo_color=Global.color
-	#mesh.mesh.material.albedo_color=fltwd.get_node("color").color
-	print(mesh.material.albedo_color)
+	tagwd.get_node("nick").text=Global.nickname
+	tagwd.get_node("color").color=Global.color
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
 	visible=true
 	camera.current=true
+
 
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -45,8 +47,20 @@ func _unhandled_input(event):
 		camera.rotate_x(-event.relative.y*.005)
 		camera.rotation.x=clamp(camera.rotation.x,-PI/2,PI/2)
 		
-	if Input.is_action_just_pressed("shoot") and anim_player.current_animation != "shoot" and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		play_shoot_effects()#.rpc()
+	if Input.is_action_just_pressed("shoot") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			anim_player.stop()
+			anim_player.play("shoot")
+			effect.emitting = true
+	if Input.is_action_just_released("shoot") and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+			anim_player.stop()
+			effect.emitting = false
+		
+		
+	if Input.is_action_just_pressed("inventory"):
+		invwd.visible =! invwd.visible
+		invwd_rtshift = rotation_degrees.y
+		invwd.rotation_degrees.y = rotation_degrees.y - invwd_rtshift
+
 
 func _physics_process(delta):
 	if not is_multiplayer_authority(): return
@@ -73,7 +87,15 @@ func _physics_process(delta):
 		anim_player.play("idle")
 
 	move_and_slide()
+	
+	invwd.rotation_degrees.y = 	-rotation_degrees.y+invwd_rtshift
+	
+	#if camera_raycast.is_colliding():
+	#$invwd/CSGMesh3D2/UI/Control/Label.text=str(camera_raycast.get_collider())
+	#print(camera_raycast.get_collider())
 
-func play_shoot_effects():
-	anim_player.stop()
-	anim_player.play("shoot")
+@rpc("call_remote")
+func change_color(color):
+	mesh.material.albedo_color=color
+
+	

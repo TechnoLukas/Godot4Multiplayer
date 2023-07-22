@@ -21,4 +21,3 @@ func _on_joinbt_pressed():
 	
 	Global.nickname=nicknamenp.text
 	Global.color=colornp.color
-
