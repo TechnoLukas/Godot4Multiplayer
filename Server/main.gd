@@ -16,7 +16,7 @@ func _ready():
 
 func player_connected(peer_id):
 	print(peer_id, " connected")
-	#add_connected_player.rpc_id(peer_id)
+	add_connected_player.rpc_id(peer_id)
 	
 func add_player(peer_id):
 	var player = preload("res://player.tscn").instantiate()
