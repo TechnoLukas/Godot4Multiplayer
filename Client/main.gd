@@ -18,13 +18,12 @@ func _on_joinbt_pressed():
 	peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 	multiplayer.multiplayer_peer = peer
 	
-"""
-func add_player(peer_id):
-	var player = preload("res://player.tscn").instantiate()
-	player.set_multiplayer_authority(peer_id)
-	add_child(player)
-"""
 @rpc
-func add_connected_player():
-	print("hi")
+func add_player(peer_id):
+	pass
+
+@rpc
+func add_connected_player(peer_id):
+	print("add_connected_player ", peer_id)
+	add_player.rpc_id(1,peer_id)
 

@@ -12,15 +12,14 @@ func _ready():
 	peer.create_server(PORT)
 	multiplayer.multiplayer_peer=peer
 	multiplayer.peer_connected.connect(player_connected)
+	print(multiplayer.get_unique_id())
 
 func player_connected(peer_id):
-	add_connected_player.rpc_id(peer_id)
+	add_connected_player.rpc_id(peer_id,peer_id)
 	
-
+@rpc
 func add_player(peer_id):
-	var player = preload("res://player.tscn").instantiate()
-	player.set_multiplayer_authority(peer_id)
-	add_child(player)
+	print("add_player ",peer_id)
 	
 @rpc
 func add_connected_player(peer_id):

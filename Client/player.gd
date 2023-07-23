@@ -25,12 +25,13 @@ func _enter_tree():
 	
 
 func _ready():
+	print("no authority")
 	if not is_multiplayer_authority(): return
-	
+	print("authority")
 	change_color.rpc_id(1,multiplayer.get_unique_id())
 	
 	tagwd.get_node("nick").text=Global.nickname
-	tagwd.get_node("color").color=Global.color
+	#tagwd.get_node("color").color=Global.color
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
