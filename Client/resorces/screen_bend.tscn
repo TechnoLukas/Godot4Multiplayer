@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqdfvqwmiiv3a"]
+
+[ext_resource type="PackedScene" uid="uid://c1i7i1fkb20jp" path="res://resorces/screen_bend.gltf" id="1_5imph"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jycxb"]
+transparency = 1
+shading_mode = 0
+specular_mode = 2
+albedo_color = Color(0.2, 0.717647, 1, 0.243137)
+
+[node name="screen_bend" instance=ExtResource("1_5imph")]
+
+[node name="Plane" parent="." index="0"]
+material_override = SubResource("StandardMaterial3D_jycxb")
