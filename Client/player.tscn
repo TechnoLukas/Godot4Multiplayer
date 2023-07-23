@@ -402,5 +402,5 @@ horizontal_alignment = 1
 [node name="screen_bend2" parent="invwd" instance=ExtResource("2_03snl")]
 transform = Transform3D(0.625, 0, 0, 0, -0.10853, -0.615505, 0, 0.615505, -0.10853, 0, 0.491689, -1.06087)
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+[node name="MultiplayerSync" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_jvrmg")

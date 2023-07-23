@@ -4,3 +4,5 @@
 
 [node name="player" type="Node3D"]
 script = ExtResource("1_emdhd")
+
+[node name="MultiplayerSync" type="MultiplayerSynchronizer" parent="."]

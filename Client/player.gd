@@ -21,14 +21,12 @@ var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
 func _enter_tree():
-	set_multiplayer_authority(str(name).to_int())
+	name=str(get_multiplayer_authority())
 	
 
 func _ready():
-	print("no authority")
 	if not is_multiplayer_authority(): return
 	print("authority")
-	change_color.rpc_id(1,multiplayer.get_unique_id())
 	
 	tagwd.get_node("nick").text=Global.nickname
 	#tagwd.get_node("color").color=Global.color
@@ -99,9 +97,4 @@ func shoot():
 	var instance = scene.instantiate()
 	instance.position=$Camera3D/Pistol/Marker3D.global_position
 	get_parent().add_child(instance)
-
-@rpc
-func change_color(peer_id):
-	pass
-
 	

@@ -19,10 +19,34 @@ func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
 	
 @rpc("any_peer")
-func ping_player(peer_id):
+func ping_player():
 	pass
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
 	database[peer_id]={"nickname":nickname,"color":color}
+	var peer_ids = []
+	for id in database:
+		peer_ids.append(id)
+	
+	print(peer_ids)
+	spawn_old_players.rpc_id(peer_id,peer_ids)
+	spawn_new_player.rpc(peer_id)
+	#spawn_fake_player(peer_id)
 	print(database)
+
+@rpc
+func spawn_new_player():
+	pass
+	
+@rpc
+func spawn_old_players():
+	pass
+	
+func spawn_fake_player(peer_id):
+	var player = preload("res://player.tscn").instantiate()
+	player.set_multiplayer_authority(peer_id)
+	add_child(player)
+	
+	
+	
