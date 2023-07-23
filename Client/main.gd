@@ -16,7 +16,14 @@ func add_player(peer_id):
 """
 @rpc
 func add_connected_player():
-	print("hi")
+	print("client")
+	set_multiplayer_authority(multiplayer.get_unique_id())
+	print(is_multiplayer_authority(), " ", multiplayer.get_unique_id())
+	spawn_player.rpc_id(1)
+
+@rpc("any_peer")
+func spawn_player():
+	print("host")
 
 
 func _on_join_pressed():
