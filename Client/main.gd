@@ -32,6 +32,10 @@ func spawn_player(peer_id):
 	var player = preload("res://player.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
 	add_child(player)
+	
+@rpc
+func remove_player(peer_id):
+	get_node(str(peer_id)).queue_free()
 
 @rpc
 func spawn_new_player(peer_id):

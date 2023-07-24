@@ -13,14 +13,14 @@ func _ready():
 	peer.create_server(PORT)
 	multiplayer.multiplayer_peer=peer
 	multiplayer.peer_connected.connect(peer_connected)
-	print(multiplayer.get_unique_id())
+	multiplayer.peer_disconnected.connect(peer_disconnected)
 
 func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
 	
-@rpc("any_peer")
-func ping_player():
-	pass
+func peer_disconnected(peer_id):
+	remove_player.rpc(peer_id)
+	
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
@@ -34,7 +34,12 @@ func share_player_properties(peer_id,nickname, color):
 	spawn_new_player.rpc(peer_id)
 	spawn_fake_player(peer_id)
 	print(database)
-
+	
+func spawn_fake_player(peer_id):
+	var player = preload("res://player.tscn").instantiate()
+	player.set_multiplayer_authority(peer_id)
+	add_child(player)
+	
 @rpc
 func spawn_new_player():
 	pass
@@ -43,10 +48,13 @@ func spawn_new_player():
 func spawn_old_players():
 	pass
 	
-func spawn_fake_player(peer_id):
-	var player = preload("res://player.tscn").instantiate()
-	player.set_multiplayer_authority(peer_id)
-	add_child(player)
+@rpc
+func remove_player():
+	pass
+	
+@rpc("any_peer")
+func ping_player():
+	pass
 	
 	
 	
