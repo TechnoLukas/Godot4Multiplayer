@@ -51,3 +51,4 @@ func spawn_old_players(_database):
 @rpc
 func remove_player(_peer_id):
 	pass
+	

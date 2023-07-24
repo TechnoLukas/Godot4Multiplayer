@@ -29,8 +29,7 @@ func share_player_properties():
 
 func spawn_player(peer_id,properties):
 	var player = preload("res://player.tscn").instantiate()
-	#player.nickname=properties.nickname
-	#player.color=properties.color
+	player.visible=false
 	player.set_multiplayer_authority(peer_id)
 	add_child(player)
 	player.update_properties(properties.nickname,properties.color)
