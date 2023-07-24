@@ -32,6 +32,7 @@ func spawn_player(peer_id,nickname,color):
 	var player = preload("res://player.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
 	player.nickname=nickname
+	player.color=color
 	add_child(player)
 	
 @rpc
