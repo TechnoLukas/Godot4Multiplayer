@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://cmaessyb06584"]
+[gd_scene load_steps=25 format=3 uid="uid://cmaessyb06584"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 [ext_resource type="PackedScene" uid="uid://bqdfvqwmiiv3a" path="res://resorces/screen_bend.tscn" id="2_03snl"]
@@ -182,48 +182,6 @@ border_width_right = 5
 border_width_bottom = 5
 border_color = Color(1, 1, 1, 1)
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_jvrmg"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/sync = true
-properties/0/watch = false
-properties/1/path = NodePath(".:rotation")
-properties/1/spawn = true
-properties/1/sync = true
-properties/1/watch = false
-properties/2/path = NodePath("Camera3D:rotation")
-properties/2/spawn = true
-properties/2/sync = true
-properties/2/watch = false
-properties/3/path = NodePath("AnimationPlayer:current_animation")
-properties/3/spawn = true
-properties/3/sync = true
-properties/3/watch = false
-properties/4/path = NodePath(".:visible")
-properties/4/spawn = true
-properties/4/sync = true
-properties/4/watch = false
-properties/5/path = NodePath("CSGMesh3D:material")
-properties/5/spawn = true
-properties/5/sync = true
-properties/5/watch = false
-properties/6/path = NodePath("tagviewport/window/color:color")
-properties/6/spawn = true
-properties/6/sync = true
-properties/6/watch = false
-properties/7/path = NodePath("tagviewport/window/nick:text")
-properties/7/spawn = true
-properties/7/sync = true
-properties/7/watch = false
-properties/8/path = NodePath("invwd:visible")
-properties/8/spawn = true
-properties/8/sync = true
-properties/8/watch = false
-properties/9/path = NodePath("invwd:rotation")
-properties/9/spawn = true
-properties/9/sync = true
-properties/9/watch = false
-
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3htem")
 
@@ -401,6 +359,3 @@ horizontal_alignment = 1
 
 [node name="screen_bend2" parent="invwd" instance=ExtResource("2_03snl")]
 transform = Transform3D(0.625, 0, 0, 0, -0.10853, -0.615505, 0, 0.615505, -0.10853, 0, 0.491689, -1.06087)
-
-[node name="MultiplayerSync" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_jvrmg")

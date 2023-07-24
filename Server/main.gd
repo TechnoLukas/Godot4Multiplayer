@@ -24,10 +24,10 @@ func ping_player():
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
-	database[peer_id]={"nickname":nickname,"color":color}
 	var peer_ids = []
 	for id in database:
 		peer_ids.append(id)
+	database[peer_id]={"nickname":nickname,"color":color}
 	
 	print(peer_ids)
 	spawn_old_players.rpc_id(peer_id,peer_ids)

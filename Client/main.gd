@@ -40,6 +40,7 @@ func spawn_new_player(peer_id):
 	
 @rpc
 func spawn_old_players(peer_ids):
+	print(peer_ids)
 	for peer_id in peer_ids:
 		spawn_player(peer_id)
 

@@ -173,11 +173,6 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_alhut")
 theme_override_styles/focus = SubResource("StyleBoxFlat_alhut")
 color = Color(1, 1, 1, 1)
 
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-process_mode = 3
-_spawnable_scenes = PackedStringArray("res://player.tscn")
-spawn_path = NodePath("..")
-
 [connection signal="pressed" from="Menu/VBoxContainer/joinbt" to="." method="_on_joinbt_pressed"]
 [connection signal="text_submitted" from="Menu/VBoxContainer/addressinp" to="." method="_on_addressinp_text_submitted"]
 [connection signal="text_submitted" from="Menu/VBoxContainer/nicknamenp" to="." method="_on_addressinp_text_submitted"]
