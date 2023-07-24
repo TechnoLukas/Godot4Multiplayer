@@ -25,10 +25,10 @@ func peer_disconnected(peer_id):
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
-	
 	spawn_old_players.rpc_id(peer_id,database)
 	database[peer_id]={"nickname":nickname,"color":color}
-	spawn_new_player.rpc(peer_id,database[peer_id])
+	spawn_new_player.rpc(peer_id)
+	update_player_properties.rpc(database)
 
 	spawn_fake_player(peer_id)
 	print(database)
@@ -37,22 +37,23 @@ func spawn_fake_player(peer_id):
 	var player = preload("res://player.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
 	add_child(player)
-	
-@rpc
-func spawn_new_player():
-	pass
-	
-@rpc
-func spawn_old_players():
-	pass
-	
-@rpc
-func remove_player():
-	pass
-	
+
 @rpc("any_peer")
-func ping_player():
+func ping_player(_peer_id):
+	pass
+
+@rpc
+func spawn_new_player(_peer_id):
 	pass
 	
+@rpc
+func spawn_old_players(_database):
+	pass
 	
+@rpc
+func update_player_properties(_database):
+	pass
 	
+@rpc
+func remove_player(_peer_id):
+	pass

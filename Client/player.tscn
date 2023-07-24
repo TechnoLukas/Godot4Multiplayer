@@ -132,7 +132,7 @@ border_color = Color(1, 1, 1, 1)
 [node name="player" type="CharacterBody3D"]
 script = ExtResource("1_3htem")
 
-[node name="CSGMesh3D" type="CSGMesh3D" parent="."]
+[node name="Mesh" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_5ipbi")
 
@@ -141,7 +141,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_yabfh")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.968813, 0.247794, 0, -0.247794, 0.968813, -4.76837e-07, 2.78341, 2.28313)
+transform = Transform3D(1, 0, 0, 0, 0.999935, -0.0113967, 0, 0.0113967, 0.999935, -4.76837e-07, 1.48341, -0.0168677)
 
 [node name="Pistol" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, -0.700001)
@@ -182,10 +182,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -21.0
-offset_top = -22.0
-offset_right = 21.0
-offset_bottom = 22.0
+offset_left = -24.5
+offset_top = -25.0
+offset_right = 24.5
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 36

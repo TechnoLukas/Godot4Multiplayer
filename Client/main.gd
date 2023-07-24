@@ -21,31 +21,34 @@ func _on_joinbt_pressed():
 
 @rpc("any_peer")
 func ping_player(peer_id):
-	print("Me %d got pinged by server" % [peer_id])
+	#print("I am ready %d" % [peer_id])
 	share_player_properties.rpc_id(1,peer_id,nicknamenp.text,colornp.color)
 
 @rpc("any_peer")	
 func share_player_properties():
 	pass
 
-func spawn_player(peer_id,nickname,color):
+func spawn_player(peer_id):
 	var player = preload("res://player.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
-	player.nickname=nickname
-	player.color=color
 	add_child(player)
+
+@rpc
+func spawn_new_player(peer_id):
+	spawn_player(peer_id)
+
+@rpc
+func spawn_old_players(database):
+	for peer_id in database:
+		spawn_player(peer_id)
+		
+@rpc
+func update_player_properties(database):
+	for peer_id in database:
+		get_node(str(peer_id)).get_node("Mesh").mesh.material.albedo_color=database[peer_id].color
+		
 	
 @rpc
 func remove_player(peer_id):
 	get_node(str(peer_id)).queue_free()
-
-@rpc
-func spawn_new_player(peer_id,properties):
-	spawn_player(peer_id,properties.nickname,properties.color)
-
-	
-@rpc
-func spawn_old_players(database):
-	for peer_id in database:
-		spawn_player(peer_id,database[peer_id].nickname,database[peer_id].color)
 
