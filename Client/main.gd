@@ -7,7 +7,6 @@ extends Node3D
 
 const Player=preload("res://player.tscn")
 const PORT=9999
-
 var peer = WebSocketMultiplayerPeer.new()
 
 func _init():
@@ -46,6 +45,7 @@ func spawn_old_players(database):
 func update_player_properties(database):
 	for peer_id in database:
 		get_node(str(peer_id)).mesh.mesh.material.albedo_color=database[peer_id].color
+		get_node(str(peer_id)).nicklabel.text=database[peer_id].nickname
 		
 		
 	

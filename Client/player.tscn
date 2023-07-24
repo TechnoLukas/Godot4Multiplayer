@@ -129,9 +129,10 @@ border_width_right = 5
 border_width_bottom = 5
 border_color = Color(1, 1, 1, 1)
 
-[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("mesh")]
+[node name="player" type="CharacterBody3D" node_paths=PackedStringArray("mesh", "nicklabel")]
 script = ExtResource("1_3htem")
 mesh = NodePath("Mesh")
+nicklabel = NodePath("tagviewport/window/nick")
 color = Color(0.717647, 0, 0.792157, 1)
 
 [node name="Mesh" type="CSGMesh3D" parent="."]
