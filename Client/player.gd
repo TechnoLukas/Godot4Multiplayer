@@ -16,9 +16,6 @@ var shooting = false
 @onready var invwd = $invwd
 @onready var invwd_ui = $invwd/UI/Control
 
-@export var nickname:String
-@export var color:Color
-
 var invwd_rtshift = 0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
@@ -38,6 +35,8 @@ func _ready():
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
 	visible=true
 	camera.current=true
+	
+
 	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -65,6 +64,7 @@ func _unhandled_input(event):
 		invwd.rotation_degrees.y = rotation_degrees.y - invwd_rtshift
 
 func _physics_process(delta):
+	
 	if not is_multiplayer_authority(): return
 	
 	if not is_on_floor():
@@ -113,4 +113,7 @@ func remote_process(authority_position,authority_rotation,authority_cam_rotation
 	invwd.visible=authority_invwd_visible
 	
 
+func update_properties(n,c):
+	tagwd.get_node("nick").text=n
+	mesh.mesh.material.albedo_color=c
 	
