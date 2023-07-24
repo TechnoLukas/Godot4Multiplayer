@@ -45,7 +45,8 @@ func spawn_old_players(database):
 @rpc
 func update_player_properties(database):
 	for peer_id in database:
-		get_node(str(peer_id)).get_node("Mesh").mesh.material.albedo_color=database[peer_id].color
+		get_node(str(peer_id)).mesh.mesh.material.albedo_color=database[peer_id].color
+		
 		
 	
 @rpc

@@ -5,7 +5,7 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 var shooting = false
 
-@onready var mesh = $Mesh
+@export var mesh:CSGMesh3D
 @onready var camera = $Camera3D
 @onready var camera_raycast = $Camera3D/raycast
 @onready var anim_player = $AnimationPlayer
