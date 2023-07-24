@@ -92,7 +92,7 @@ func _physics_process(delta):
 	if shooting:
 		shoot()
 		
-	remote_set_position.rpc(global_position)
+	remote_set_transform.rpc(global_position,global_rotation,camera.global_rotation)
 
 func shoot():
 	var scene = preload("res://paintball.tscn")
@@ -101,6 +101,8 @@ func shoot():
 	get_parent().add_child(instance)
 	
 @rpc("unreliable")
-func remote_set_position(authority_position):
+func remote_set_transform(authority_position,authority_rotation,authority_cam_rotation):
 	global_position = authority_position
+	global_rotation = authority_rotation
+	camera.global_rotation=authority_cam_rotation
 	
