@@ -32,7 +32,7 @@ func share_player_properties(peer_id,nickname, color):
 	print(peer_ids)
 	spawn_old_players.rpc_id(peer_id,peer_ids)
 	spawn_new_player.rpc(peer_id)
-	#spawn_fake_player(peer_id)
+	spawn_fake_player(peer_id)
 	print(database)
 
 @rpc

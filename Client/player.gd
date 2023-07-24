@@ -91,10 +91,16 @@ func _physics_process(delta):
 	
 	if shooting:
 		shoot()
+		
+	remote_set_position.rpc(global_position)
 
 func shoot():
 	var scene = preload("res://paintball.tscn")
 	var instance = scene.instantiate()
 	instance.position=$Camera3D/Pistol/Marker3D.global_position
 	get_parent().add_child(instance)
+	
+@rpc("unreliable")
+func remote_set_position(authority_position):
+	global_position = authority_position
 	
