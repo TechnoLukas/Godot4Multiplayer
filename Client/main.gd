@@ -28,9 +28,10 @@ func ping_player(peer_id):
 func share_player_properties():
 	pass
 
-func spawn_player(peer_id):
+func spawn_player(peer_id,nickname,color):
 	var player = preload("res://player.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
+	player.nickname=nickname
 	add_child(player)
 	
 @rpc
@@ -38,13 +39,12 @@ func remove_player(peer_id):
 	get_node(str(peer_id)).queue_free()
 
 @rpc
-func spawn_new_player(peer_id):
-	spawn_player(peer_id)
+func spawn_new_player(peer_id,properties):
+	spawn_player(peer_id,properties.nickname,properties.color)
 
 	
 @rpc
-func spawn_old_players(peer_ids):
-	print(peer_ids)
-	for peer_id in peer_ids:
-		spawn_player(peer_id)
+func spawn_old_players(database):
+	for peer_id in database:
+		spawn_player(peer_id,database[peer_id].nickname,database[peer_id].color)
 

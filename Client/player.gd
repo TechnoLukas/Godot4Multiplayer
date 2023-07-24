@@ -9,11 +9,13 @@ var shooting = false
 @onready var camera = $Camera3D
 @onready var camera_raycast = $Camera3D/raycast
 @onready var anim_player = $AnimationPlayer
-@onready var effect = $Camera3D/Pistol/GPUParticles3D
 
 @onready var tagwd = $tagviewport/window
 @onready var invwd = $invwd
 @onready var invwd_ui = $invwd/UI/Control
+
+@export var nickname:String
+@export var color:Color
 
 var invwd_rtshift = 0
 
@@ -28,14 +30,19 @@ func _ready():
 	if not is_multiplayer_authority(): return
 	print("authority")
 	
-	tagwd.get_node("nick").text=Global.nickname
-	#tagwd.get_node("color").color=Global.color
+	tagwd.get_node("nick").text=nickname
+	mesh.mesh.material.albedo_color=color
 	
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	position=Vector3(randf_range(-5,5),2,randf_range(-5,5))
 	visible=true
 	camera.current=true
-
+	
+	
+	remote_ready_properties.rpc(tagwd.get_node("nick").text,mesh.mesh.material.albedo_color)
+	
+	
+	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
@@ -108,6 +115,11 @@ func remote_process(authority_position,authority_rotation,authority_cam_rotation
 	invwd.global_rotation=authority_invwd_rotation
 	anim_player.current_animation=authority_anim_player_current_animation
 	invwd.visible=authority_invwd_visible
+
+@rpc("unreliable")
+func remote_ready_properties(authority_nickname,authority_color):
+	tagwd.get_node("nick").text=authority_nickname
+	mesh.mesh.material.albedo_color=authority_color
 	
 	
 

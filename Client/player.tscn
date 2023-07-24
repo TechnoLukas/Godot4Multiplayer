@@ -1,13 +1,14 @@
-[gd_scene load_steps=25 format=3 uid="uid://cmaessyb06584"]
+[gd_scene load_steps=16 format=3 uid="uid://cmaessyb06584"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 [ext_resource type="PackedScene" uid="uid://bqdfvqwmiiv3a" path="res://resorces/screen_bend.tscn" id="2_03snl"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_5ipbi"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6odyr"]
 resource_local_to_scene = true
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7gs2w"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_5ipbi"]
 resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_6odyr")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yabfh"]
 
@@ -16,60 +17,6 @@ albedo_color = Color(0.0156863, 0.0156863, 0.0156863, 1)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5s6t3"]
 albedo_color = Color(0.223529, 0.223529, 0.223529, 1)
-
-[sub_resource type="Curve" id="Curve_7iflf"]
-min_value = -360.0
-max_value = 360.0
-_data = [Vector2(0, 160.142), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_2ppo0"]
-curve = SubResource("Curve_7iflf")
-
-[sub_resource type="Gradient" id="Gradient_rdfdg"]
-offsets = PackedFloat32Array(0, 0.323214, 0.705357, 1)
-colors = PackedColorArray(0, 0, 0, 1, 0.426786, 0.426786, 0.426786, 1, 0.771622, 0.771622, 0.771622, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_mhcgk"]
-gradient = SubResource("Gradient_rdfdg")
-
-[sub_resource type="Curve" id="Curve_6i70u"]
-_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.373665), 0.0, 0.0, 0, 0]
-point_count = 2
-
-[sub_resource type="CurveTexture" id="CurveTexture_j0mmk"]
-curve = SubResource("Curve_6i70u")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2v7t5"]
-lifetime_randomness = 0.46
-emission_shape = 1
-emission_sphere_radius = 0.1
-direction = Vector3(0, 0, -1)
-spread = 0.0
-gravity = Vector3(0, -0.1, 0)
-initial_velocity_min = 7.0
-initial_velocity_max = 7.0
-angular_velocity_curve = SubResource("CurveTexture_2ppo0")
-scale_curve = SubResource("CurveTexture_j0mmk")
-color_ramp = SubResource("GradientTexture1D_mhcgk")
-hue_variation_min = -0.28
-hue_variation_max = 0.07
-turbulence_noise_strength = 0.13
-turbulence_noise_scale = 4.14
-collision_mode = 1
-collision_friction = 1.0
-collision_bounce = 0.0
-collision_use_scale = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_87nio"]
-albedo_color = Color(0.419608, 1, 1, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_8gtod"]
-lightmap_size_hint = Vector2i(3, 2)
-material = SubResource("StandardMaterial3D_87nio")
-radius = 0.022
-height = 0.042
-rings = 6
 
 [sub_resource type="Animation" id="Animation_nsie2"]
 length = 0.001
@@ -188,14 +135,13 @@ script = ExtResource("1_3htem")
 [node name="CSGMesh3D" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mesh = SubResource("CapsuleMesh_5ipbi")
-material = SubResource("StandardMaterial3D_7gs2w")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_yabfh")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+transform = Transform3D(1, 0, 0, 0, 0.968813, 0.247794, 0, -0.247794, 0.968813, -4.76837e-07, 2.78341, 2.28313)
 
 [node name="Pistol" type="Node3D" parent="Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.4, -0.700001)
@@ -214,20 +160,6 @@ material = SubResource("StandardMaterial3D_5s6t3")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0963947, -0.205295)
 size = Vector3(0.104832, 0.0978091, 0.0466311)
 material = SubResource("StandardMaterial3D_5s6t3")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="Camera3D/Pistol"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.435722)
-cast_shadow = 0
-emitting = false
-amount = 100
-lifetime = 4.96
-visibility_aabb = AABB(-1.71085, -0.971288, -28.7923, 3.42169, 1.94258, 57.5846)
-process_material = SubResource("ParticleProcessMaterial_2v7t5")
-draw_pass_1 = SubResource("SphereMesh_8gtod")
-
-[node name="GPUParticlesCollisionHeightField3D" type="GPUParticlesCollisionHeightField3D" parent="Camera3D/Pistol"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -23.9438)
-size = Vector3(5, 5, 53.05)
 
 [node name="Marker3D" type="Marker3D" parent="Camera3D/Pistol"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.434805)
@@ -288,7 +220,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "TEXT"
+text = "NICKNAME"
 horizontal_alignment = 1
 vertical_alignment = 1
 

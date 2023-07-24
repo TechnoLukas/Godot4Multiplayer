@@ -19,19 +19,17 @@ func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
 	
 func peer_disconnected(peer_id):
+	database.erase(peer_id)
 	remove_player.rpc(peer_id)
 	
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
-	var peer_ids = []
-	for id in database:
-		peer_ids.append(id)
-	database[peer_id]={"nickname":nickname,"color":color}
 	
-	print(peer_ids)
-	spawn_old_players.rpc_id(peer_id,peer_ids)
-	spawn_new_player.rpc(peer_id)
+	spawn_old_players.rpc_id(peer_id,database)
+	database[peer_id]={"nickname":nickname,"color":color}
+	spawn_new_player.rpc(peer_id,database[peer_id])
+
 	spawn_fake_player(peer_id)
 	print(database)
 	
