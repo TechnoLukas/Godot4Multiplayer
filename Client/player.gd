@@ -91,6 +91,7 @@ func shoot():
 	var scene = preload("res://paintball.tscn")
 	var instance = scene.instantiate()
 	instance.position=$Camera3D/Pistol/Marker3D.global_position
+	instance.get_child(0).material.albedo_color=mesh.mesh.material.albedo_color
 	get_parent().add_child(instance)
 	
 @rpc("unreliable")

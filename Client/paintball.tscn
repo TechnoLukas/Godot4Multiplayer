@@ -1,15 +1,9 @@
 [gd_scene load_steps=2 format=3 uid="uid://hrj13605alru"]
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_11p0k"]
-properties/0/path = NodePath("CSGSphere3D:position")
-properties/0/spawn = true
-properties/0/sync = true
-properties/0/watch = false
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_durk0"]
 
 [node name="paintball" type="Node3D"]
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="."]
 radius = 0.05
-
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_11p0k")
+material = SubResource("StandardMaterial3D_durk0")
