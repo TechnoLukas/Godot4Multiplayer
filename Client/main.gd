@@ -58,6 +58,7 @@ func share_point_properties(_p_name, _p_position, _p_color):
 func spawn_new_point(properties):
 	var point = preload("res://paintball.tscn").instantiate()
 	point.position=properties.position
+	point.get_child(0).material.albedo_color=properties.color
 	get_parent().add_child(point)
 	
 

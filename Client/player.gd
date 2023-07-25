@@ -84,7 +84,7 @@ func _physics_process(delta):
 	
 	if shooting:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
-		get_parent().share_point_properties.rpc_id(1,"point"+str(markerpos),markerpos,Color(1,0,0))
+		get_parent().share_point_properties.rpc_id(1,"point"+str(markerpos),markerpos,mesh.mesh.material.albedo_color)
 		await get_tree().create_timer(0.01).timeout
 		
 	remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
