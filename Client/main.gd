@@ -61,5 +61,13 @@ func spawn_new_point(properties):
 	point.get_child(0).material.albedo_color=properties.color
 	get_parent().add_child(point)
 	
+@rpc
+func spawn_old_points(database):
+	for p in database:
+		var point = preload("res://paintball.tscn").instantiate()
+		point.position=database[p].position
+		point.get_child(0).material.albedo_color=database[p].color
+		get_parent().add_child(point)
+	
 
 
