@@ -7,5 +7,3 @@ func _ready():
 func remote_process(_authority_position,_authority_rotation,_authority_cam_rotation, _authority_invwd_rotation, _authority_anim_player_current_animation, _authority_invwd_visible):
 	pass
 	
-func change_visibility(_visible):
-	pass

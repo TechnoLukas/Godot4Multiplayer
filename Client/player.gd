@@ -83,15 +83,15 @@ func _physics_process(delta):
 	invwd.rotation_degrees.y = 	-rotation_degrees.y+invwd_rtshift
 	
 	if shooting:
-		shoot()
+		spawn_new_bullet()
 		
 	remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
 
-func shoot():
+
+func spawn_new_bullet():
 	var scene = preload("res://paintball.tscn")
 	var instance = scene.instantiate()
 	instance.position=$Camera3D/Pistol/Marker3D.global_position
-	instance.get_child(0).material.albedo_color=mesh.mesh.material.albedo_color
 	get_parent().add_child(instance)
 	
 @rpc("unreliable")
