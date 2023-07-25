@@ -5,6 +5,7 @@ const PORT=9999
 
 var peer = WebSocketMultiplayerPeer.new()
 var database = {}
+var pointsdatabase = {}
 
 func _init():
 	peer.supported_protocols = ["ludus"]
@@ -37,6 +38,12 @@ func spawn_fake_player(peer_id):
 	add_child(player)
 
 @rpc("any_peer")
+func share_point_properties(p_name, p_position, p_color):
+	pointsdatabase[p_name]={"position":p_position,"color":p_color}
+	spawn_new_point.rpc(pointsdatabase[p_name])
+	
+
+@rpc("any_peer")
 func ping_player(_peer_id):
 	pass
 
@@ -50,5 +57,9 @@ func spawn_old_players(_database):
 	
 @rpc
 func remove_player(_peer_id):
+	pass
+	
+@rpc
+func spawn_new_point(_properties):
 	pass
 	

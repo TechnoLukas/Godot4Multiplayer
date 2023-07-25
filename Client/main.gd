@@ -50,4 +50,15 @@ func spawn_old_players(database):
 func remove_player(peer_id):
 	get_node(str(peer_id)).queue_free()
 
+@rpc("any_peer")
+func share_point_properties(_p_name, _p_position, _p_color):
+	pass
+
+@rpc
+func spawn_new_point(properties):
+	var point = preload("res://paintball.tscn").instantiate()
+	point.position=properties.position
+	get_parent().add_child(point)
+	
+
 
