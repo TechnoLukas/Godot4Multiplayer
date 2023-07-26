@@ -101,7 +101,7 @@ text = "Join"
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 50
-text = "192.168.8.129"
+text = "localhost"
 placeholder_text = "enter address"
 alignment = 1
 

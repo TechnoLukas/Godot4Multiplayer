@@ -234,6 +234,7 @@ texture = SubResource("ViewportTexture_ip2tl")
 
 [node name="invwd" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.2, 0)
+visible = false
 
 [node name="Sprite3D" type="Sprite3D" parent="invwd"]
 transform = Transform3D(0.152, 0, 0, 0, 0.149691, -0.0263945, 0, 0.0263945, 0.149691, 0, 0.511786, -1.03185)
