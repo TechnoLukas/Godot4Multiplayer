@@ -18,7 +18,7 @@ func _ready():
 
 func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
-	
+
 func peer_disconnected(peer_id):
 	database.erase(peer_id)
 	remove_player.rpc(peer_id)
@@ -57,7 +57,7 @@ func spawn_new_player(_peer_id,_properties):
 func spawn_old_players(_database):
 	pass
 	
-@rpc
+@rpc("any_peer")
 func remove_player(_peer_id):
 	pass
 	

@@ -46,9 +46,10 @@ func spawn_old_players(database):
 	for peer_id in database:
 		spawn_player(peer_id,database[peer_id])
 		
-@rpc
+@rpc("any_peer")
 func remove_player(peer_id):
-	get_node(str(peer_id)).queue_free()
+	if get_node_or_null(str(peer_id)):
+		get_node(str(peer_id)).queue_free()
 
 @rpc("any_peer")
 func share_point_properties(_p_name, _p_position, _p_color):
