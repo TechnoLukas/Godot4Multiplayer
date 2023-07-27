@@ -116,6 +116,7 @@ size_flags_vertical = 3
 theme_override_font_sizes/font_size = 50
 placeholder_text = "nickname"
 alignment = 1
+max_length = 10
 
 [node name="ColorRect" type="Panel" parent="Menu/VBoxContainer"]
 layout_mode = 2
@@ -172,6 +173,19 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_alhut")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_alhut")
 theme_override_styles/focus = SubResource("StyleBoxFlat_alhut")
 color = Color(1, 1, 1, 1)
+
+[node name="Label" type="Label" parent="Menu"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -317.0
+offset_top = 17.0
+offset_right = -15.0
+offset_bottom = 64.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 26
+text = "min nickname lenth is 2"
 
 [connection signal="pressed" from="Menu/VBoxContainer/joinbt" to="." method="_on_joinbt_pressed"]
 [connection signal="text_submitted" from="Menu/VBoxContainer/addressinp" to="." method="_on_addressinp_text_submitted"]

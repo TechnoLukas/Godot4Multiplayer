@@ -13,14 +13,14 @@ func _init():
 	peer.supported_protocols = ["ludus"]
 	
 func _on_joinbt_pressed():
-	main_menu.hide()
-	peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
-	multiplayer.multiplayer_peer = peer
+	if len(nicknamenp.text)>=2 and len(nicknamenp.text)<10:
+		main_menu.hide()
+		peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
+		multiplayer.multiplayer_peer = peer
 	
 
 @rpc("any_peer")
 func ping_player(peer_id):
-	#print("I am ready %d" % [peer_id])
 	share_player_properties.rpc_id(1,peer_id,nicknamenp.text,colornp.color)
 
 @rpc("any_peer")	
@@ -44,8 +44,7 @@ func spawn_new_player(peer_id,properties):
 func spawn_old_players(database):
 	for peer_id in database:
 		spawn_player(peer_id,database[peer_id])
-		
-		
+			
 @rpc("any_peer")
 func remove_player(peer_id):
 	if get_node_or_null(str(peer_id)):
