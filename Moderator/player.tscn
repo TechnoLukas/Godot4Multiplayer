@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://gtkvyldlgln6"]
 
-[ext_resource type="Script" path="res://player.gd" id="1_13pci"]
+[ext_resource type="Script" path="res://player.gd" id="1_m01e2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kyf78"]
 bg_color = Color(0.0705882, 0.0823529, 0.101961, 1)
@@ -54,7 +54,7 @@ offset_bottom = 49.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_kyf78")
-script = ExtResource("1_13pci")
+script = ExtResource("1_m01e2")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

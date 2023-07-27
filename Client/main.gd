@@ -34,7 +34,6 @@ func spawn_player(peer_id,properties):
 	player.position=Vector3(randf_range(-4.5,4.5),0.3,randf_range(-4.5,4.5))
 	add_child(player)
 	player.update_properties(properties.nickname,properties.color)
-	await get_tree().create_timer(0.1).timeout
 	player.change_visibility(true)
 
 @rpc
@@ -45,6 +44,7 @@ func spawn_new_player(peer_id,properties):
 func spawn_old_players(database):
 	for peer_id in database:
 		spawn_player(peer_id,database[peer_id])
+		
 		
 @rpc("any_peer")
 func remove_player(peer_id):
