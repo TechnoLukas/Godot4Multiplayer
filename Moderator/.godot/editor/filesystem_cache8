@@ -1,0 +1,8 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1690455973
+export_presets.cfg::TextFile::-1::1690381784::0::1::::<><>::
+icon.svg::CompressedTexture2D::9041532053467133358::1690377583::1690377588::1::::<><>::
+main.gd::GDScript::-1::1690387502::0::1::::<>Control<>::
+main.tscn::PackedScene::5371873345118464063::1690455977::0::1::::<><>::res://main.gd<>uid://gtkvyldlgln6::::res://player_item.tscn
+player.gd::GDScript::-1::1690387033::0::1::::<>Panel<>::
+player_item.tscn::PackedScene::461002188459504517::1690455968::0::1::::<><>::res://player.gd
