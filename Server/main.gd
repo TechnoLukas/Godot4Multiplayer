@@ -25,13 +25,16 @@ func peer_disconnected(peer_id):
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
+	#spawn_fake_player(peer_id)
 	spawn_old_players.rpc_id(peer_id,database)
-	spawn_old_points.rpc_id(peer_id,pointsdatabase)
+	if len(pointsdatabase) > 0:
+		spawn_old_points.rpc_id(peer_id,pointsdatabase)
 	database[peer_id]={"nickname":nickname,"color":color}
+	
+	spawn_fake_player(peer_id)
 	spawn_new_player.rpc(peer_id,database[peer_id])
 	
 
-	spawn_fake_player(peer_id)
 	print(database)
 	
 func spawn_fake_player(peer_id):

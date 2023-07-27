@@ -13,7 +13,7 @@ func _init():
 	peer.supported_protocols = ["ludus"]
 	
 func _on_joinbt_pressed():
-	if len(nicknamenp.text)>=2 and len(nicknamenp.text)<10:
+	if len(nicknamenp.text)>=2:
 		main_menu.hide()
 		peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 		multiplayer.multiplayer_peer = peer
@@ -34,6 +34,7 @@ func spawn_player(peer_id,properties):
 	player.position=Vector3(randf_range(-4.5,4.5),0.3,randf_range(-4.5,4.5))
 	add_child(player)
 	player.update_properties(properties.nickname,properties.color)
+	await get_tree().create_timer(0.1).timeout
 	player.change_visibility(true)
 
 @rpc
