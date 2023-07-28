@@ -10,7 +10,8 @@ const PORT=9999
 var peer = WebSocketMultiplayerPeer.new()
 
 func _init():
-	peer.supported_protocols = ["ludus"]
+	pass
+	#peer.supported_protocols = ["ludus"]
 	
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:
@@ -34,7 +35,7 @@ func spawn_player(peer_id,properties):
 	player.position=Vector3(randf_range(-4.5,4.5),0.3,randf_range(-4.5,4.5))
 	add_child(player)
 	player.update_properties(properties.nickname,properties.color)
-	await get_tree().create_timer(0.1).timeout
+	await get_tree().create_timer(0.05).timeout
 	player.change_visibility(true)
 
 @rpc
@@ -46,7 +47,7 @@ func spawn_old_players(database):
 	for peer_id in database:
 		spawn_player(peer_id,database[peer_id])
 			
-@rpc("any_peer")
+@rpc
 func remove_player(peer_id):
 	if get_node_or_null(str(peer_id)):
 		get_node(str(peer_id)).queue_free()

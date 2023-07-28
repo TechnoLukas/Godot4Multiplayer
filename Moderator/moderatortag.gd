@@ -1,6 +1,6 @@
 extends Control
 
-#@onready var list = $"../Panel"
+@onready var list = $"../Panel"
 var database
 
 const PORT=7777

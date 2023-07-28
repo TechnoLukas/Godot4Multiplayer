@@ -1,6 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://e8xbpgk2y3i3"]
+[gd_scene load_steps=10 format=3 uid="uid://e8xbpgk2y3i3"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_j6oyd"]
+
+[sub_resource type="GDScript" id="GDScript_06r6n"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yt530"]
 albedo_color = Color(0.160784, 0.407843, 0.298039, 1)
@@ -47,6 +49,9 @@ shadow_color = Color(1, 1, 1, 0.6)
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_j6oyd")
+
+[node name="moderator" type="Node3D" parent="."]
+script = SubResource("GDScript_06r6n")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 material_override = SubResource("StandardMaterial3D_yt530")
