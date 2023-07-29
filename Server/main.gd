@@ -1,7 +1,7 @@
 extends Node3D
 
 const Player=preload("res://player.tscn")
-const PORT=9998
+const PORT=9999
 
 var peer = WebSocketMultiplayerPeer.new()
 var database = {}
