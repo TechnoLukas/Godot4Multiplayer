@@ -3,7 +3,7 @@ extends Control
 #@onready var list = $"../Panel"
 var database
 
-const PORT=7777
+const PORT=8888
 var peer = WebSocketMultiplayerPeer.new()
 var y = 0
 var ys = 55

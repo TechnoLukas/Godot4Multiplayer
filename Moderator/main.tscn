@@ -1,7 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://cisf77lu277nv"]
-
-[ext_resource type="Script" path="res://main.gd" id="1_5atlf"]
-[ext_resource type="Script" path="res://moderatortag.gd" id="2_dw2b2"]
+[gd_scene load_steps=4 format=3 uid="uid://cisf77lu277nv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x2wqb"]
 bg_color = Color(0.160784, 0.180392, 0.211765, 1)
@@ -22,13 +19,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_5atlf")
-
-[node name="moderatortag" type="Control" parent="."]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("2_dw2b2")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1

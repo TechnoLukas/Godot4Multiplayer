@@ -46,7 +46,6 @@ func spawn_fake_player(peer_id):
 func share_point_properties(p_name, p_position, p_color):
 	pointsdatabase[p_name]={"position":p_position,"color":p_color}
 	spawn_new_point.rpc(pointsdatabase[p_name])
-	print(pointsdatabase.size())
 	
 
 @rpc("any_peer")
