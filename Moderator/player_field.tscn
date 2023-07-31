@@ -1,0 +1,122 @@
+[gd_scene load_steps=9 format=3 uid="uid://d2cclpo828q5q"]
+
+[ext_resource type="Script" path="res://player_field.gd" id="1_aercy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kyf78"]
+bg_color = Color(0.0705882, 0.0823529, 0.101961, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p02kq"]
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_inq32"]
+bg_color = Color(0.117647, 0.133333, 0.156863, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u7ks4"]
+bg_color = Color(0.117647, 0.133333, 0.156863, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(1, 0, 0, 1)
+shadow_size = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ytmjy"]
+bg_color = Color(0.117647, 0.133333, 0.156863, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_color = Color(1, 1, 1, 1)
+shadow_size = 5
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7x4qr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yuxkq"]
+
+[node name="player" type="Panel"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 61.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kyf78")
+script = ExtResource("1_aercy")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 25.0
+offset_top = -23.5
+offset_right = 506.0
+offset_bottom = 23.5
+grow_vertical = 2
+
+[node name="nickaname" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 31
+text = "nickname"
+vertical_alignment = 1
+
+[node name="peer_id" type="Label" parent="HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.431373, 0.431373, 0.431373, 1)
+theme_override_font_sizes/font_size = 31
+text = "peer_id"
+vertical_alignment = 1
+
+[node name="color" type="Panel" parent="HBoxContainer"]
+custom_minimum_size = Vector2(50, 35)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_p02kq")
+
+[node name="kickbt" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -101.5
+offset_top = -21.5
+offset_right = -12.5
+offset_bottom = 22.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_hover_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 0, 0, 1)
+theme_override_colors/font_hover_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_disabled_color = Color(1, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_inq32")
+theme_override_styles/hover = SubResource("StyleBoxFlat_u7ks4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ytmjy")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_7x4qr")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_yuxkq")
+text = "kick"
+
+[connection signal="pressed" from="kickbt" to="." method="_on_kickbt_pressed"]

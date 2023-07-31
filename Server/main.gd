@@ -1,6 +1,5 @@
 extends Node3D
 
-const Player=preload("res://player.tscn")
 const PORT=9999
 
 var peer = WebSocketMultiplayerPeer.new()
@@ -23,6 +22,7 @@ func peer_connected(peer_id):
 func peer_disconnected(peer_id):
 	remove_player.rpc(peer_id)
 	database.erase(peer_id)
+	moderator_server.send_dict(database)
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
@@ -33,12 +33,13 @@ func share_player_properties(peer_id,nickname, color):
 	
 	spawn_new_player.rpc(peer_id,{"nickname":nickname,"color":color})
 	
-	spawn_fake_player(peer_id)
+	spawn_player_dummy(peer_id)
 	database[peer_id]={"nickname":nickname,"color":color}
+	moderator_server.send_dict(database)
 	print(database)
 	
-func spawn_fake_player(peer_id):
-	var player = preload("res://player.tscn").instantiate()
+func spawn_player_dummy(peer_id):
+	var player = preload("res://player_dummy.tscn").instantiate()
 	player.set_multiplayer_authority(peer_id)
 	add_child(player)
 

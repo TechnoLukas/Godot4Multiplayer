@@ -17,4 +17,4 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-ModeratorClient="*res://moderator_client.gd"
+moderator_server="*res://moderator_server.gd"
