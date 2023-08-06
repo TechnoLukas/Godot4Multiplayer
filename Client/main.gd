@@ -27,11 +27,12 @@ func _on_joinbt_pressed():
 		multiplayer.server_disconnected.connect(server_disconnected)
 			
 func server_disconnected():
-	print("server_disconnected")
+	#print("server_disconnected")
+	for i in list.get_children(): list.remove_child(i)
 	notification_menu.get_node("text").text=notification_text
 	notification_menu.visible=true
+	print(get_children())
 	#if not kicked:
-	#	print("remove last item")
 	#	get_child(get_child_count()-1).connection = false
 	#	remove_child(get_child(get_child_count()-1))
 	
@@ -63,23 +64,11 @@ func spawn_old_players(database):
 		spawn_player(peer_id,database[peer_id])
 			
 @rpc
-func remove_player(peer_id,not_text):
-	print("kicked=true")
-	kicked=true
-	
-	if multiplayer.get_unique_id()==peer_id:
-		notification_text=not_text
+func remove_player(peer_id,_not_text):
+	if list.get_node_or_null(str(peer_id)):
+		list.get_node(str(peer_id)).connection = false
 		list.remove_child(list.get_node(str(peer_id)))
-	
-	elif get_node_or_null(str(peer_id)):
-		print("---------------------------------- ",multiplayer.get_unique_id())
-		print(get_children())
-		get_node(str(peer_id)).connection = false
-		remove_child(get_node(str(peer_id)))
-		print("--------")
-		print(get_children())
-		print("----------------------------------")
-
+		
 @rpc("any_peer")
 func share_point_properties(_p_name, _p_position, _p_color):
 	pass

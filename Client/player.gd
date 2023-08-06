@@ -93,7 +93,8 @@ func _physics_process(delta):
 	if connection:
 		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
 	else:
-		get_tree().queue_free()
+		queue_free()
+		print("queue_free()")
 		
 @rpc("unreliable")
 func remote_process(authority_position,authority_rotation,authority_cam_rotation,authority_invwd_rotation,authority_anim_player_current_animation,authority_invwd_visible):
