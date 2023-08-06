@@ -5,6 +5,8 @@ const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 var shooting = false
 
+@export var connection =false
+
 @export var mesh:CSGMesh3D
 @export var nicklabel:Label
 
@@ -27,7 +29,7 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current=true
 	invwd.visible=false
-
+	connection=true
 	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -85,11 +87,14 @@ func _physics_process(delta):
 	
 	if shooting:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
-		get_parent().share_point_properties.rpc_id(1,"point"+str(markerpos),markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,"point"+str(markerpos),markerpos,mesh.mesh.material.albedo_color)
 		await get_tree().create_timer(0.01).timeout
 		
-	remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
-	
+	if connection:
+		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
+	else:
+		get_tree().queue_free()
+		
 @rpc("unreliable")
 func remote_process(authority_position,authority_rotation,authority_cam_rotation,authority_invwd_rotation,authority_anim_player_current_animation,authority_invwd_visible):
 	global_position = authority_position
@@ -105,4 +110,5 @@ func change_visibility(_visible):
 func update_properties(n,c):
 	tagwd.get_node("nick").text=n
 	mesh.mesh.material.albedo_color=c
+	
 	

@@ -19,7 +19,7 @@ func _ready():
 	elif connection.get_status() == connection.STATUS_NONE or connection.get_status() == StreamPeerTCP.STATUS_ERROR:
 		print("Error connecting to " + ip + " : " + str(port))
 
-func _process( delta ):
+func _process(_delta):
 	connection.poll()
 
 	if !connected:
@@ -29,7 +29,7 @@ func _process( delta ):
 			return
 	
 	if connection.get_status() == connection.STATUS_NONE or connection.get_status() == connection.STATUS_ERROR:
-		print("Server disconnected?")
+		update_player_fields({})
 		connected = false
 		return
 	
@@ -50,13 +50,13 @@ func _process( delta ):
 			update_player_fields(database_res)
 
 func update_player_fields(database):
-	print(database)
 	var list = $Panel2/List
 	var ypos = 0
 	var ystep = 70
 	
 	for i in list.get_children():
-		i.queue_free()
+		i.delete()
+		list.remove_child(i)
 		
 	for i in database:
 		var player_field = preload("res://player_field.tscn").instantiate()
@@ -64,6 +64,9 @@ func update_player_fields(database):
 		player_field.position.y = ypos
 		ypos=ypos+ystep
 		player_field.set_properties(database[i].nickname, i, database[i].color)
+		
+func send_command(command):
+	connection.put_data(command.to_ascii_buffer())
 		
 
 		

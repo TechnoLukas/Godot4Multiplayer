@@ -1,9 +1,15 @@
 extends Node3D
 
 @onready var main_menu = $Menu
+@onready var notification_menu = $Notification
 
 @onready var nicknamenp = $Menu/VBoxContainer/nicknamenp
 @onready var colornp = $Menu/VBoxContainer/ColorRect/HBoxContainer/Panel/ColorPickerButton
+
+@onready var list = $player_list
+
+var notification_text="server closed"
+var kicked=false
 
 const Player=preload("res://player.tscn")
 const PORT=9999
@@ -16,11 +22,19 @@ func _init():
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:
 		main_menu.hide()
-		#peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
-		peer.create_client("ws://" + "localhost" + ":" + str(PORT))
+		peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 		multiplayer.multiplayer_peer = peer
+		multiplayer.server_disconnected.connect(server_disconnected)
+			
+func server_disconnected():
+	print("server_disconnected")
+	notification_menu.get_node("text").text=notification_text
+	notification_menu.visible=true
+	#if not kicked:
+	#	print("remove last item")
+	#	get_child(get_child_count()-1).connection = false
+	#	remove_child(get_child(get_child_count()-1))
 	
-
 @rpc("any_peer")
 func ping_player(peer_id):
 	share_player_properties.rpc_id(1,peer_id,nicknamenp.text,colornp.color)
@@ -34,7 +48,7 @@ func spawn_player(peer_id,properties):
 	player.set_multiplayer_authority(peer_id)
 	player.visible=false
 	player.position=Vector3(randf_range(-4.5,4.5),0.3,randf_range(-4.5,4.5))
-	add_child(player)
+	list.add_child(player)
 	player.update_properties(properties.nickname,properties.color)
 	#await get_tree().create_timer(0.05).timeout
 	player.change_visibility(true)
@@ -49,9 +63,22 @@ func spawn_old_players(database):
 		spawn_player(peer_id,database[peer_id])
 			
 @rpc
-func remove_player(peer_id):
-	if get_node_or_null(str(peer_id)):
-		get_node(str(peer_id)).queue_free()
+func remove_player(peer_id,not_text):
+	print("kicked=true")
+	kicked=true
+	
+	if multiplayer.get_unique_id()==peer_id:
+		notification_text=not_text
+		list.remove_child(list.get_node(str(peer_id)))
+	
+	elif get_node_or_null(str(peer_id)):
+		print("---------------------------------- ",multiplayer.get_unique_id())
+		print(get_children())
+		get_node(str(peer_id)).connection = false
+		remove_child(get_node(str(peer_id)))
+		print("--------")
+		print(get_children())
+		print("----------------------------------")
 
 @rpc("any_peer")
 func share_point_properties(_p_name, _p_position, _p_color):

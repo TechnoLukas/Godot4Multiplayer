@@ -2,6 +2,7 @@ extends Node
 
 const port = 4242
  
+signal command(value)
 
 var server # for holding your TCP_Server object
 var connection = [] # for holding multiple connection (StreamPeerTCP) objects
@@ -28,12 +29,12 @@ func _process( _delta ):
 			if data[0]!=OK:
 				print("Error data",data[0])
 			else:
-				var js = str(data[1].get_string_from_ascii())
 				#print(data[1])
-				#var dt= data[1]
-				#print(dt)
-				var d2:Dictionary = JSON.parse_string(js)
-				print(d2,typeof(d2))
+				var cmd = str(data[1].get_string_from_ascii())
+				command.emit(cmd)
+				print(cmd)
+				#var d2= JSON.parse_string(js)
+				#print(d2,typeof(d2))
 				# Answer to client 
 				
 

@@ -5,7 +5,7 @@ extends Panel
 @onready var colorfd = $HBoxContainer/color
 
 func _on_kickbt_pressed():
-	get_parent().get_parent().get_parent().remove_player.rpc(int(peer_idfd.text))
+	get_parent().get_parent().get_parent().send_command("kick "+str(peer_idfd.text))
 	
 func set_properties(nick,id,color):
 	nicknamefd.text=nick
@@ -20,6 +20,9 @@ func set_properties(nick,id,color):
 	stbx.corner_radius_top_left = 10
 	stbx.corner_radius_top_right = 10
 	colorfd.add_theme_stylebox_override("panel",stbx)
+	
+func delete():
+	queue_free()
 	
 
 
