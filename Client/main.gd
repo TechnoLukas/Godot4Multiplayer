@@ -64,7 +64,8 @@ func spawn_old_players(database):
 		spawn_player(peer_id,database[peer_id])
 			
 @rpc
-func remove_player(peer_id,_not_text):
+func remove_player(peer_id,notifi_text):
+	if peer_id==multiplayer.get_unique_id(): notification_text=notifi_text
 	if list.get_node_or_null(str(peer_id)):
 		list.get_node(str(peer_id)).connection = false
 		list.remove_child(list.get_node(str(peer_id)))
