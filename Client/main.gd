@@ -2,9 +2,11 @@ extends Node3D
 
 @onready var main_menu = $Menu
 @onready var notification_menu = $Notification
+@onready var loading_menu = $Loading
 
 @onready var nicknamenp = $Menu/VBoxContainer/nicknamenp
 @onready var colornp = $Menu/VBoxContainer/ColorRect/HBoxContainer/Panel/ColorPickerButton
+@onready var progresslb = $Loading/progress
 
 @onready var list = $player_list
 
@@ -25,17 +27,30 @@ func _on_joinbt_pressed():
 		peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 		multiplayer.multiplayer_peer = peer
 		multiplayer.server_disconnected.connect(server_disconnected)
-			
+		multiplayer.connection_failed.connect(_connection_failed)
+
+# --------- SERVER ------------------
+func _connection_failed():
+	show_notification("server is currently offline")
+
 func server_disconnected():
 	#print("server_disconnected")
 	for i in list.get_children(): list.remove_child(i)
-	notification_menu.get_node("text").text=notification_text
-	notification_menu.visible=true
-	print(get_children())
+	show_notification(notification_text)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	#if not kicked:
 	#	get_child(get_child_count()-1).connection = false
 	#	remove_child(get_child(get_child_count()-1))
 	
+func show_notification(text, timer=0.0):
+	notification_menu.get_node("text").text=text
+	notification_menu.visible=true
+	if timer != 0.0:
+		await get_tree().create_timer(timer).timeout
+		notification_menu.visible=false
+
+
+# --------- PLAYER ------------------
 @rpc("any_peer")
 func ping_player(peer_id):
 	share_player_properties.rpc_id(1,peer_id,nicknamenp.text,colornp.color)
@@ -70,24 +85,39 @@ func remove_player(peer_id,notifi_text):
 		list.get_node(str(peer_id)).connection = false
 		list.remove_child(list.get_node(str(peer_id)))
 		
+		
+# --------- POINTS ------------------
 @rpc("any_peer")
-func share_point_properties(_p_name, _p_position, _p_color):
+func share_point_properties(_p_position, _p_color):
 	pass
 
 @rpc
 func spawn_new_point(properties):
 	var point = preload("res://paintball.tscn").instantiate()
-	point.position=properties.position
-	point.get_child(0).material.albedo_color=properties.color
+	point.position=properties[0]
+	point.get_child(0).material.albedo_color=properties[1]
 	get_parent().add_child(point)
 	
 @rpc
-func spawn_old_points(database):
+func spawn_old_points(database,proggressn,finished):
+	loading_menu.visible=!finished
+	progresslb.text="%"+str(proggressn)
 	for p in database:
 		var point = preload("res://paintball.tscn").instantiate()
-		point.position=database[p].position
-		point.get_child(0).material.albedo_color=database[p].color
+		point.position=p[0]
+		point.get_child(0).material.albedo_color=p[1]
 		get_parent().add_child(point)
+	
+	
+
+
+
+	
+
+
+
+	
+
 	
 
 

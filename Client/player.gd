@@ -20,6 +20,8 @@ var shooting = false
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
+var shooting_delay = 0
+var shooting_delay_cr = 0
 
 func _enter_tree():
 	name=str(get_multiplayer_authority())
@@ -85,10 +87,19 @@ func _physics_process(delta):
 	
 	invwd.rotation_degrees.y = 	-rotation_degrees.y+invwd_rtshift
 	
-	if shooting:
+	if shooting && shooting_delay_cr>shooting_delay:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
-		get_parent().get_parent().share_point_properties.rpc_id(1,"point"+str(markerpos),markerpos,mesh.mesh.material.albedo_color)
-		await get_tree().create_timer(0.01).timeout
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		shooting_delay_cr=0
+	elif shooting_delay_cr<=shooting_delay:
+		shooting_delay_cr=shooting_delay_cr+1
+		
+		
 		
 	if connection:
 		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
