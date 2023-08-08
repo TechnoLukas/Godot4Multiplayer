@@ -3,6 +3,7 @@ extends Node3D
 const PORT=9999
 
 var peer = WebSocketMultiplayerPeer.new()
+var playerloadingprog = {}
 var database = {}
 var pointsdatabase = []
 
@@ -30,34 +31,49 @@ func peer_disconnected(peer_id):
 	
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
-	
+	playerloadingprog[peer_id]=0
 	spawn_old_players.rpc_id(peer_id,database)
+	loading(peer_id,nickname, color, pointsdatabase)
+	
+
+func loading(peer_id,nickname, color, pdt):
+	var loadingpointsdatabase = pdt.slice(playerloadingprog[peer_id],pdt.size()-1)
 	var cut = 100 #1000
-	var cut_per = snapped(100.0/((pointsdatabase.size()/cut)+1),0.1)
-	print("size: ",pointsdatabase.size(),"persantage: " ,cut_per)
-	if pointsdatabase.size()<cut:
-		spawn_old_points.rpc_id(peer_id,pointsdatabase)
+	var cut_per = snapped(100.0/((loadingpointsdatabase.size()/cut)+1),0.1)
+	print("size: ",loadingpointsdatabase.size(),"persantage: " ,cut_per)
+	if loadingpointsdatabase.size()<cut:
+		spawn_old_points.rpc_id(peer_id,loadingpointsdatabase)
+		playersp(peer_id,nickname, color)
 	else:		
-		for i in range(pointsdatabase.size()/cut):
+		for i in range(loadingpointsdatabase.size()/cut):
 			var finished
-			var slice = pointsdatabase.slice(cut*i,cut*i+cut)
+			var slice = loadingpointsdatabase.slice(cut*i,cut*i+cut)
 			var persantage
-			if i == (pointsdatabase.size()/cut)-1:
+			if i == (loadingpointsdatabase.size()/cut)-1:
 				persantage=100.0
 				finished=true
+				playersp(peer_id,nickname, color)
+				print("DONE")
 			else:
 				persantage = i*cut_per
 				finished=false
 				
 			spawn_old_points.rpc_id(peer_id,slice,persantage,finished)
-			print("loading: ", persantage,"% ",slice.size())
+			playerloadingprog[peer_id]=playerloadingprog[peer_id]+slice.size()
+			print("loading: ", persantage,"% ",slice.size()," ", i, "/", loadingpointsdatabase.size()/cut)
+			
+			if playerloadingprog[peer_id] == loadingpointsdatabase.size():
+				print("loaded but something left")
+			
 			await get_tree().create_timer(0.1).timeout #Delay because of packs staking on the client's side.
 	
+
+func playersp(peer_id,nickname,color):
 	spawn_new_player.rpc(peer_id,{"nickname":nickname,"color":color})
-	
 	spawn_player_dummy(peer_id)
 	database[peer_id]={"nickname":nickname,"color":color}
 	moderator_server.send_dict(database)
+	
 	
 func spawn_player_dummy(peer_id):
 	var player = preload("res://player_dummy.tscn").instantiate()

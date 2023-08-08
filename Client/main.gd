@@ -12,6 +12,7 @@ extends Node3D
 
 var notification_text="server closed"
 var kicked=false
+var loading = false
 
 const Player=preload("res://player.tscn")
 const PORT=9999
@@ -100,6 +101,7 @@ func spawn_new_point(properties):
 	
 @rpc
 func spawn_old_points(database,proggressn,finished):
+	loading=!finished
 	loading_menu.visible=!finished
 	progresslb.text="%"+str(proggressn)
 	for p in database:

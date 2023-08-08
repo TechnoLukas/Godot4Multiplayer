@@ -28,7 +28,7 @@ func _enter_tree():
 	
 func _ready():
 	if not is_multiplayer_authority(): return
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current=true
 	invwd.visible=false
 	connection=true
@@ -89,12 +89,8 @@ func _physics_process(delta):
 	
 	if shooting && shooting_delay_cr>shooting_delay:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
-		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
+		for i in range(5):
+			get_parent().get_parent().share_point_properties.rpc_id(1,markerpos+Vector3(randf_range(-0.1,0.1),randf_range(-0.1,0.1),randf_range(-0.1,0.1)),mesh.mesh.material.albedo_color)
 		shooting_delay_cr=0
 	elif shooting_delay_cr<=shooting_delay:
 		shooting_delay_cr=shooting_delay_cr+1
