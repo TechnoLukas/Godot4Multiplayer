@@ -20,7 +20,7 @@ var shooting = false
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
-var shooting_delay = 0
+var shooting_delay = 2
 var shooting_delay_cr = 0
 
 func _enter_tree():
@@ -89,8 +89,7 @@ func _physics_process(delta):
 	
 	if shooting && shooting_delay_cr>shooting_delay:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
-		for i in range(5):
-			get_parent().get_parent().share_point_properties.rpc_id(1,markerpos+Vector3(randf_range(-0.1,0.1),randf_range(-0.1,0.1),randf_range(-0.1,0.1)),mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,markerpos,mesh.mesh.material.albedo_color)
 		shooting_delay_cr=0
 	elif shooting_delay_cr<=shooting_delay:
 		shooting_delay_cr=shooting_delay_cr+1

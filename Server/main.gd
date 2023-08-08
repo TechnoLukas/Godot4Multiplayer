@@ -14,10 +14,12 @@ func _init():
 	#peer.supported_protocols = ["ludus"]
 
 func _ready():
+	load_pointdatabase()
 	peer.create_server(PORT)
 	multiplayer.multiplayer_peer=peer
 	multiplayer.peer_connected.connect(peer_connected)
 	multiplayer.peer_disconnected.connect(peer_disconnected)
+	get_tree().set_auto_accept_quit(false)
 	
 	moderator_server.connect("command", _command)
 
@@ -37,14 +39,17 @@ func share_player_properties(peer_id,nickname, color):
 	
 
 func loading(peer_id,nickname, color, pdt):
+	print("pdt ",pdt)
 	var loadingpointsdatabase = pdt.slice(playerloadingprog[peer_id],pdt.size()-1)
 	var cut = 100 #1000
 	var cut_per = snapped(100.0/((loadingpointsdatabase.size()/cut)+1),0.1)
-	print("size: ",loadingpointsdatabase.size(),"persantage: " ,cut_per)
-	if loadingpointsdatabase.size()<cut:
-		spawn_old_points.rpc_id(peer_id,loadingpointsdatabase)
+	print("size: ",loadingpointsdatabase.size()," persantage: " ,cut_per)
+	
+	if pdt.size()<cut:
+		print(loadingpointsdatabase)
+		spawn_old_points.rpc_id(peer_id,pdt,100.0,true)
 		playersp(peer_id,nickname, color)
-	else:		
+	if loadingpointsdatabase.size()>cut:
 		for i in range(loadingpointsdatabase.size()/cut):
 			var finished
 			var slice = loadingpointsdatabase.slice(cut*i,cut*i+cut)
@@ -92,6 +97,7 @@ func share_point_properties(p_position, p_color):
 	pointsdatabase.append([p_position,p_color])
 	spawn_new_point.rpc([p_position,p_color])
 	print(pointsdatabase.size())
+	save_pointdatabase()
 	
 
 @rpc("any_peer")
@@ -119,3 +125,23 @@ func spawn_new_point(_properties):
 func spawn_old_points(_database,_proggressn,_finished):
 	pass
 	
+	
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		save_pointdatabase()
+		get_tree().quit() # default behavior
+		
+func save_pointdatabase():
+	var file = FileAccess.open("pointdatabase.bin", FileAccess.WRITE)
+	var content = pointsdatabase
+	file.store_var(content)
+
+func load_pointdatabase():
+	var file = FileAccess.open("pointdatabase.bin", FileAccess.READ)
+	var content = file.get_as_text()
+	if content == "":
+		var file2 = FileAccess.open("pointdatabase.bin", FileAccess.WRITE)
+		var content2 = [[Vector3(0,0,0),Color(0,0,0)]]
+		file2.store_var(content2)
+	content = file.get_var()
+	pointsdatabase=content
