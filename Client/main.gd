@@ -109,6 +109,12 @@ func spawn_old_points(database,proggressn,finished):
 		point.position=p[0]
 		point.get_child(0).material.albedo_color=p[1]
 		get_parent().add_child(point)
+		
+	update_loading_stat.rpc(multiplayer.get_unique_id(),"ready")
+		
+@rpc("any_peer")
+func update_loading_stat(peer_id,stat):
+	pass
 	
 	
 

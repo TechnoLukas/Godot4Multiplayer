@@ -4,6 +4,7 @@ const PORT=9999
 
 var peer = WebSocketMultiplayerPeer.new()
 var playerloadingprog = {}
+var playerloadingstat = {}
 var database = {}
 var pointsdatabase = []
 
@@ -34,6 +35,7 @@ func peer_disconnected(peer_id):
 @rpc("any_peer")	
 func share_player_properties(peer_id,nickname, color):
 	playerloadingprog[peer_id]=0
+	playerloadingstat[peer_id]="ready"
 	spawn_old_players.rpc_id(peer_id,database)
 	loading(peer_id,nickname, color, pointsdatabase)
 	
@@ -41,7 +43,7 @@ func share_player_properties(peer_id,nickname, color):
 func loading(peer_id,nickname, color, pdt):
 	print("pdt ",pdt)
 	var loadingpointsdatabase = pdt.slice(playerloadingprog[peer_id],pdt.size()-1)
-	var cut = 2 #1000
+	var cut = 100 #1000
 	var cut_per = snapped(100.0/((loadingpointsdatabase.size()/cut)+1),0.1)
 	print("size: ",loadingpointsdatabase.size()," persantage: " ,cut_per)
 	
@@ -64,14 +66,18 @@ func loading(peer_id,nickname, color, pdt):
 				finished=false
 				
 			spawn_old_points.rpc_id(peer_id,slice,persantage,finished)
+			playerloadingstat[peer_id]="loading"
 			playerloadingprog[peer_id]=playerloadingprog[peer_id]+slice.size()
 			print("loading: ", persantage,"% ",slice.size()," ", i, "/", loadingpointsdatabase.size()/cut)
 			
-			if playerloadingprog[peer_id] == loadingpointsdatabase.size():
-				print("loaded but something left")
-			
-			await get_tree().create_timer(0.001).timeout #Delay because of packs staking on the client's side.
+			var timecr = get_process_delta_time()
+			while playerloadingstat[peer_id] == "loading":
+				await get_tree().create_timer(0.01).timeout #Delay because of packs staking on the client's side.
 	
+@rpc("any_peer")
+func update_loading_stat(peer_id,stat):
+	playerloadingstat[peer_id] = stat
+
 
 func playersp(peer_id,nickname,color):
 	spawn_new_player.rpc(peer_id,{"nickname":nickname,"color":color})
