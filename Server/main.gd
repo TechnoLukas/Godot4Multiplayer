@@ -41,7 +41,7 @@ func share_player_properties(peer_id,nickname, color):
 func loading(peer_id,nickname, color, pdt):
 	print("pdt ",pdt)
 	var loadingpointsdatabase = pdt.slice(playerloadingprog[peer_id],pdt.size()-1)
-	var cut = 100 #1000
+	var cut = 2 #1000
 	var cut_per = snapped(100.0/((loadingpointsdatabase.size()/cut)+1),0.1)
 	print("size: ",loadingpointsdatabase.size()," persantage: " ,cut_per)
 	
@@ -70,7 +70,7 @@ func loading(peer_id,nickname, color, pdt):
 			if playerloadingprog[peer_id] == loadingpointsdatabase.size():
 				print("loaded but something left")
 			
-			await get_tree().create_timer(0.1).timeout #Delay because of packs staking on the client's side.
+			await get_tree().create_timer(0.001).timeout #Delay because of packs staking on the client's side.
 	
 
 func playersp(peer_id,nickname,color):
@@ -117,7 +117,7 @@ func remove_player(peer_id):
 	if get_node_or_null(str(peer_id)):
 		get_node(str(peer_id)).queue_free()
 	
-@rpc
+@rpc 
 func spawn_new_point(_properties):
 	pass
 	
