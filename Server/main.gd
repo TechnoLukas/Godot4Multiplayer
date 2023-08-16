@@ -1,12 +1,13 @@
 extends Node3D
 
-const PORT=9999
+const PORT=8080
 
 var peer = WebSocketMultiplayerPeer.new()
 var playerloadingprog = {}
 var playerloadingstat = {}
 var database = {}
 var pointsdatabase = []
+var wws_version=false
 
 @onready var list = $player_list
 
@@ -16,13 +17,28 @@ func _init():
 
 func _ready():
 	load_pointdatabase()
-	peer.create_server(PORT)
+	if wws_version:
+		print("-- WWS Build Version --")
+		var server_certs = load("apache-selfsigned.crt")
+		var server_key = load("apache-selfsigned.key")
+		var server_tls = TLSOptions.server(server_key, server_certs)
+
+		peer.create_server(PORT,"*",server_tls)
+
+		
+	else:
+		print("-- Demo Build Version --")
+		peer.create_server(PORT)
+		
 	multiplayer.multiplayer_peer=peer
 	multiplayer.peer_connected.connect(peer_connected)
 	multiplayer.peer_disconnected.connect(peer_disconnected)
+	print("WebSocketMultiplayerPeer Server crated at port ",PORT)
 	get_tree().set_auto_accept_quit(false)
 	
 	moderator_server.connect("command", _command)
+	
+		
 
 func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
@@ -144,10 +160,9 @@ func save_pointdatabase():
 
 func load_pointdatabase():
 	var file = FileAccess.open("pointdatabase.bin", FileAccess.READ)
-	var content = file.get_as_text()
-	if content == "":
+	if file.get_length() == 0:
 		var file2 = FileAccess.open("pointdatabase.bin", FileAccess.WRITE)
 		var content2 = [[Vector3(0,0,0),Color(0,0,0)]]
 		file2.store_var(content2)
-	content = file.get_var()
+	var content = file.get_var()
 	pointsdatabase=content

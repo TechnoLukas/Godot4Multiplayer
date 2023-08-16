@@ -15,23 +15,26 @@ var kicked=false
 var loading = false
 
 const Player=preload("res://player.tscn")
-const PORT=9999
+const PORT=8080
 var peer = WebSocketMultiplayerPeer.new()
 
 func _init():
 	pass
-	#peer.supported_protocols = ["ludus"]
 	
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:
 		main_menu.hide()
-		peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
+		#peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
+		#peer.create_client("ws://" + "ec2-16-171-197-200.eu-north-1.compute.amazonaws.com" + ":" + str(PORT))
+		#peer.create_client("wss://" + "www.godot-games.info:8080/")
+		peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/")
 		multiplayer.multiplayer_peer = peer
 		multiplayer.server_disconnected.connect(server_disconnected)
 		multiplayer.connection_failed.connect(_connection_failed)
 
 # --------- SERVER ------------------
 func _connection_failed():
+	print("_connection_failed")
 	show_notification("server is currently offline")
 
 func server_disconnected():
@@ -103,7 +106,7 @@ func spawn_new_point(properties):
 func spawn_old_points(database,proggressn,finished):
 	loading=!finished
 	loading_menu.visible=!finished
-	progresslb.text="%"+str(proggressn)
+	progresslb.text="loading %"+str(proggressn)+"\nplease wait"
 	for p in database:
 		var point = preload("res://paintball.tscn").instantiate()
 		point.position=p[0]
@@ -113,19 +116,5 @@ func spawn_old_points(database,proggressn,finished):
 	update_loading_stat.rpc(multiplayer.get_unique_id(),"ready")
 		
 @rpc("any_peer")
-func update_loading_stat(peer_id,stat):
+func update_loading_stat(_peer_id,_stat):
 	pass
-	
-	
-
-
-
-	
-
-
-
-	
-
-	
-
-

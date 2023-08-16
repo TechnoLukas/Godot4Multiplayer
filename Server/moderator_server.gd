@@ -9,9 +9,11 @@ var connection = [] # for holding multiple connection (StreamPeerTCP) objects
 var database = {}
 
 func _ready():
+	print("|----------------------- INFO -----------------------|")
 	server = TCPServer.new()
+	print("-- TCPServer --")
 	if server.listen(port) == 0:
-		print("Server started at port "+str(port)); 
+		print("TCPServer started at port "+str(port)); 
 	else:
 		print( "Failed to start server on port "+str(port) ); 
 

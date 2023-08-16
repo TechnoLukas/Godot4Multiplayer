@@ -1,7 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://cmaessyb06584"]
+[gd_scene load_steps=27 format=3 uid="uid://cmaessyb06584"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 [ext_resource type="PackedScene" uid="uid://bqdfvqwmiiv3a" path="res://resorces/screen_bend.tscn" id="2_03snl"]
+[ext_resource type="Script" path="res://chatinput.gd" id="3_6x6if"]
+[ext_resource type="FontFile" uid="uid://ffk7qru3grvi" path="res://resorces/PlaymegamesReguler-2OOee.ttf" id="4_esmea"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6odyr"]
 resource_local_to_scene = true
@@ -129,6 +131,39 @@ border_width_right = 5
 border_width_bottom = 5
 border_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_twtyc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_54bxl"]
+bg_color = Color(0.207843, 0.286275, 0.305882, 0.858824)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2orqg"]
+draw_center = false
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.470588, 0.8, 0.886275, 1)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rohtq"]
+bg_color = Color(0.145098, 0.145098, 0.145098, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j8yjp"]
+bg_color = Color(0.470588, 0.8, 0.886275, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a0laj"]
+draw_center = false
+corner_radius_bottom_right = 1
+shadow_color = Color(0.470588, 0.8, 0.886275, 1)
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_apdv3"]
+bg_color = Color(0.121569, 0.176471, 0.192157, 0.858824)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yhn0t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1eplj"]
+
 [node name="player" type="CharacterBody3D" node_paths=PackedStringArray("mesh", "nicklabel")]
 script = ExtResource("1_3htem")
 mesh = NodePath("Mesh")
@@ -184,18 +219,28 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -24.0
-offset_top = -67.0
-offset_right = 25.0
-offset_bottom = 24.0
+offset_left = -24.5
+offset_top = -66.0
+offset_right = 24.5
+offset_bottom = 25.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 66
 text = "."
 horizontal_alignment = 1
 
+[node name="FloatingWindow" type="Sprite3D" parent="."]
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 2.22308, 0)
+billboard = 2
+double_sided = false
+alpha_cut = 2
+alpha_antialiasing_mode = 2
+texture_filter = 5
+texture = SubResource("ViewportTexture_ip2tl")
+
 [node name="tagviewport" type="SubViewport" parent="."]
-size = Vector2i(87, 20)
+transparent_bg = true
+size = Vector2i(500, 100)
 
 [node name="window" type="Control" parent="tagviewport"]
 layout_mode = 3
@@ -205,15 +250,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="color" type="ColorRect" parent="tagviewport/window"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.235294, 0.235294, 0.235294, 1)
-
 [node name="nick" type="Label" parent="tagviewport/window"]
 layout_mode = 1
 anchors_preset = 15
@@ -221,15 +257,12 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "NICKNAME"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_outline_size = 4
+theme_override_font_sizes/font_size = 60
+text = "nickname"
 horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="FloatingWindow" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.32308, 0)
-billboard = 2
-double_sided = false
-texture = SubResource("ViewportTexture_ip2tl")
 
 [node name="invwd" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.984808, 0.173648, 0, -0.173648, 0.984808, 0, 1.2, 0)
@@ -293,3 +326,578 @@ horizontal_alignment = 1
 
 [node name="screen_bend2" parent="invwd" instance=ExtResource("2_03snl")]
 transform = Transform3D(0.625, 0, 0, 0, -0.10853, -0.615505, 0, 0.615505, -0.10853, 0, 0.491689, -1.06087)
+
+[node name="Chat" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 15.0
+offset_top = 15.0
+offset_right = 471.0
+offset_bottom = 884.0
+
+[node name="ColorRect" type="Panel" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_twtyc")
+
+[node name="bg" type="Panel" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_54bxl")
+
+[node name="glow" type="Panel" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2orqg")
+
+[node name="ItemList" type="ItemList" parent="Chat"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 14.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+auto_translate = false
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/panel = SubResource("StyleBoxFlat_rohtq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_rohtq")
+item_count = 1
+item_0/text = "Chat"
+item_0/selectable = false
+
+[node name="Frame" type="Control" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-l" type="Panel" parent="Chat/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-r" type="Panel" parent="Chat/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b" type="Panel" parent="Chat/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-t" type="Panel" parent="Chat/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="LeftCorner" type="Control" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b4" type="Panel" parent="Chat/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 5.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b5" type="Panel" parent="Chat/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 109.0
+offset_bottom = 8.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="RightCorner" type="Control" parent="Chat"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+grow_horizontal = 0
+
+[node name="frame-b6" type="Panel" parent="Chat/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -109.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 8.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b5" type="Panel" parent="Chat/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = 5.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="Input" type="Control" parent="Chat"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 7.0
+offset_top = -40.0
+offset_right = -7.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="glow" type="Panel" parent="Chat/Input"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_a0laj")
+
+[node name="bg" type="Panel" parent="Chat/Input"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_apdv3")
+
+[node name="message_input" type="LineEdit" parent="Chat/Input/bg"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = 2.0
+offset_right = -5.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("4_esmea")
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxEmpty_yhn0t")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1eplj")
+max_length = 35
+script = ExtResource("3_6x6if")
+
+[node name="frame-l" type="Panel" parent="Chat/Input"]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_top = 2.0
+offset_right = 2.0
+offset_bottom = -2.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-r" type="Panel" parent="Chat/Input"]
+custom_minimum_size = Vector2(2, 0)
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-t" type="Panel" parent="Chat/Input"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 2.0
+offset_right = -2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b" type="Panel" parent="Chat/Input"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -2.0
+offset_right = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="Messages" type="VBoxContainer" parent="Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 13.0
+offset_right = -9.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="templatemsg" type="HBoxContainer" parent="Chat/Messages"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="nick" type="Label" parent="Chat/Messages/templatemsg"]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_esmea")
+theme_override_font_sizes/font_size = 25
+text = "Luking: "
+
+[node name="message" type="Label" parent="Chat/Messages/templatemsg"]
+custom_minimum_size = Vector2(92, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_fonts/font = ExtResource("4_esmea")
+theme_override_font_sizes/font_size = 25
+text = "Test, message."
+autowrap_mode = 1
+
+[node name="hint" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -325.0
+offset_top = 15.0
+offset_right = -15.0
+offset_bottom = 231.0
+grow_horizontal = 0
+
+[node name="Window" type="Control" parent="hint"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="Panel" parent="hint/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_twtyc")
+
+[node name="bg" type="Panel" parent="hint/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_54bxl")
+
+[node name="glow" type="Panel" parent="hint/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2orqg")
+
+[node name="ItemList" type="ItemList" parent="hint"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 14.0
+offset_right = -10.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+auto_translate = false
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/guide_color = Color(1, 1, 1, 0)
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 5
+theme_override_fonts/font = ExtResource("4_esmea")
+theme_override_font_sizes/font_size = 22
+theme_override_styles/panel = SubResource("StyleBoxFlat_rohtq")
+theme_override_styles/focus = SubResource("StyleBoxFlat_rohtq")
+item_count = 3
+item_0/text = "\"TAB\" - activate mouse"
+item_0/selectable = false
+item_1/text = "\"Esc\" - deactivate mouse"
+item_2/text = "\"E\" - open floating ui [no use]"
+
+[node name="Frame" type="Control" parent="hint"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-l" type="Panel" parent="hint/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-r" type="Panel" parent="hint/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b" type="Panel" parent="hint/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-t" type="Panel" parent="hint/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="LeftCorner" type="Control" parent="hint"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b4" type="Panel" parent="hint/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 5.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b5" type="Panel" parent="hint/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 109.0
+offset_bottom = 8.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="RightCorner" type="Control" parent="hint"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b6" type="Panel" parent="hint/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -8.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[node name="frame-b5" type="Panel" parent="hint/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -5.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
+
+[connection signal="text_submitted" from="Chat/Input/bg/message_input" to="." method="_on_message_input_text_submitted"]

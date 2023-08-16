@@ -1,0 +1,6 @@
+*.py
+*.pck
+*.sh
+*.x86_64
+WebExport/butler.exe
+*.dll

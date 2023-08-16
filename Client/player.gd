@@ -17,11 +17,18 @@ var shooting = false
 @onready var tagwd = $tagviewport/window
 @onready var invwd = $invwd
 @onready var invwd_ui = $invwd/UI/Control
+@onready var hint = $hint
+
+@onready var chat = $Chat
+@onready var chat_window=$Chat/Messages
+@onready var message_node=$Chat/Messages/templatemsg
+@onready var msg_input=$Chat/Input/bg/message_input
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var shooting_delay = 2
 var shooting_delay_cr = 0
+var message_written = false
 
 func _enter_tree():
 	name=str(get_multiplayer_authority())
@@ -29,16 +36,21 @@ func _enter_tree():
 func _ready():
 	if not is_multiplayer_authority(): return
 	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	
 	camera.current=true
 	invwd.visible=false
 	connection=true
+	hint.visible=true
+	tagwd.visible=false
+	chat.visible=true
 	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
 	
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	if Input.is_action_just_pressed("ui_focus_next"):
+	if Input.is_action_just_pressed("focus"):
+		msg_input.release_focus()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x*.005)
@@ -59,7 +71,6 @@ func _unhandled_input(event):
 		invwd.rotation_degrees.y = rotation_degrees.y - invwd_rtshift
 
 func _physics_process(delta):
-	
 	if not is_multiplayer_authority(): return
 	
 	if not is_on_floor():
@@ -94,8 +105,6 @@ func _physics_process(delta):
 	elif shooting_delay_cr<=shooting_delay:
 		shooting_delay_cr=shooting_delay_cr+1
 		
-		
-		
 	if connection:
 		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
 	else:
@@ -103,7 +112,7 @@ func _physics_process(delta):
 		print("queue_free()")
 		
 @rpc("unreliable")
-func remote_process(authority_position,authority_rotation,authority_cam_rotation,authority_invwd_rotation,authority_anim_player_current_animation,authority_invwd_visible):
+func remote_process(authority_position,authority_rotation,authority_cam_rotation,authority_invwd_rotation,authority_anim_player_current_animation,authority_invwd_visible ):
 	global_position = authority_position
 	global_rotation = authority_rotation
 	camera.global_rotation=authority_cam_rotation
@@ -115,7 +124,38 @@ func change_visibility(_visible):
 	visible=_visible
 
 func update_properties(n,c):
+	var cc = 1-(c.r+c.g+c.b)/3.0
 	tagwd.get_node("nick").text=n
+	tagwd.get_node("nick").set("theme_override_colors/font_color", c)
+	tagwd.get_node("nick").set("theme_override_colors/font_outline_color", Color(cc,cc,cc,1))
 	mesh.mesh.material.albedo_color=c
 	
+	
+func _on_message_input_text_submitted(new_text):
+	send_message(nicklabel.text,new_text,tagwd.get_node("nick").get("theme_override_colors/font_color"))
+	print(multiplayer.get_unique_id(), " sent rpc")
+	print(chat.visible)
+	send_message_rpc.rpc(nicklabel.text,new_text,tagwd.get_node("nick").get("theme_override_colors/font_color"))
+	msg_input.text=""
+
+func send_message(nick, message,color):
+	#print(tagwd.get_node("nick").text," : ", nick, " ", message, " ", color)
+	var msg = message_node.duplicate()
+	var cc = 1-(color.r+color.g+color.b)/3.0
+	msg.get_node("nick").text=nick+":"
+	msg.get_node("nick").set("theme_override_colors/font_color", color)
+	msg.get_node("nick").set("theme_override_colors/font_outline_color", Color(cc,cc,cc))
+	msg.get_node("message").text=message
+	msg.get_node("message").set("theme_override_colors/font_color", color)
+	msg.get_node("message").set("theme_override_colors/font_outline_color", Color(cc,cc,cc))
+	msg.visible=true
+	chat_window.add_child(msg)
+	#print(msg," : ", chat_window.get_children())
+
+@rpc
+func send_message_rpc(nick, message,color):
+	print(multiplayer.get_unique_id(), " recieved rpc")
+	print(chat.visible)
+	
+		
 	
