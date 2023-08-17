@@ -6,6 +6,7 @@ extends Node3D
 
 @onready var nicknamenp = $Menu/VBoxContainer/nicknamenp
 @onready var colornp = $Menu/VBoxContainer/ColorRect/HBoxContainer/Panel/ColorPickerButton
+
 @onready var progresslb = $Loading/progress
 
 @onready var list = $player_list
@@ -18,8 +19,8 @@ const Player=preload("res://player.tscn")
 const PORT=8080
 var peer = WebSocketMultiplayerPeer.new()
 
-func _init():
-	pass
+func _ready():
+	colornp.color = Color(randf_range(0,1),randf_range(0,1),randf_range(0,1))
 	
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://cmaessyb06584"]
+[gd_scene load_steps=30 format=3 uid="uid://cmaessyb06584"]
 
 [ext_resource type="Script" path="res://player.gd" id="1_3htem"]
 [ext_resource type="PackedScene" uid="uid://bqdfvqwmiiv3a" path="res://resorces/screen_bend.tscn" id="2_03snl"]
@@ -164,10 +164,35 @@ bg_color = Color(0.121569, 0.176471, 0.192157, 0.858824)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1eplj"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_661k8"]
+bg_color = Color(0.470588, 0.8, 0.886275, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_7b3wn"]
+color = Color(0.133333, 0.192157, 0.207843, 1)
+thickness = 10
+vertical = true
+
+[sub_resource type="Theme" id="Theme_w1bta"]
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_661k8")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_661k8")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_661k8")
+VScrollBar/styles/scroll = SubResource("StyleBoxLine_7b3wn")
+VScrollBar/styles/scroll_focus = null
+
 [node name="player" type="CharacterBody3D" node_paths=PackedStringArray("mesh", "nicklabel")]
 script = ExtResource("1_3htem")
 mesh = NodePath("Mesh")
 nicklabel = NodePath("tagviewport/window/nick")
+
+[node name="message" type="Label" parent="."]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0
+text = "{\"nick\":\"\",\"message\":\"\",\"color\":Color(0,0,0)}"
 
 [node name="Mesh" type="CSGMesh3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -258,8 +283,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
-theme_override_constants/shadow_outline_size = 4
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 60
 text = "nickname"
 horizontal_alignment = 1
@@ -328,7 +353,6 @@ horizontal_alignment = 1
 transform = Transform3D(0.625, 0, 0, 0, -0.10853, -0.615505, 0, 0.615505, -0.10853, 0, 0.491689, -1.06087)
 
 [node name="Chat" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 15.0
@@ -644,23 +668,31 @@ mouse_force_pass_scroll_events = false
 mouse_default_cursor_shape = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_j8yjp")
 
-[node name="Messages" type="VBoxContainer" parent="Chat"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Chat"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 9.0
-offset_top = 13.0
-offset_right = -9.0
+offset_top = 16.0
+offset_right = -10.0
 offset_bottom = -49.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = SubResource("Theme_w1bta")
+horizontal_scroll_mode = 0
 
-[node name="templatemsg" type="HBoxContainer" parent="Chat/Messages"]
+[node name="Messages" type="VBoxContainer" parent="Chat/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="templatemsg" type="HBoxContainer" parent="Chat/ScrollContainer/Messages"]
+visible = false
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="nick" type="Label" parent="Chat/Messages/templatemsg"]
+[node name="nick" type="Label" parent="Chat/ScrollContainer/Messages/templatemsg"]
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
@@ -669,7 +701,7 @@ theme_override_fonts/font = ExtResource("4_esmea")
 theme_override_font_sizes/font_size = 25
 text = "Luking: "
 
-[node name="message" type="Label" parent="Chat/Messages/templatemsg"]
+[node name="message" type="Label" parent="Chat/ScrollContainer/Messages/templatemsg"]
 custom_minimum_size = Vector2(92, 0)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -681,7 +713,6 @@ text = "Test, message."
 autowrap_mode = 1
 
 [node name="hint" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
@@ -750,11 +781,12 @@ theme_override_fonts/font = ExtResource("4_esmea")
 theme_override_font_sizes/font_size = 22
 theme_override_styles/panel = SubResource("StyleBoxFlat_rohtq")
 theme_override_styles/focus = SubResource("StyleBoxFlat_rohtq")
-item_count = 3
+item_count = 4
 item_0/text = "\"TAB\" - activate mouse"
 item_0/selectable = false
 item_1/text = "\"Esc\" - deactivate mouse"
 item_2/text = "\"E\" - open floating ui [no use]"
+item_3/text = "\"T\" - open chat"
 
 [node name="Frame" type="Control" parent="hint"]
 layout_mode = 1

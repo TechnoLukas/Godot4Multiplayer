@@ -4,3 +4,4 @@
 *.x86_64
 WebExport/butler.exe
 *.dll
+*.bat

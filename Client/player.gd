@@ -20,15 +20,15 @@ var shooting = false
 @onready var hint = $hint
 
 @onready var chat = $Chat
-@onready var chat_window=$Chat/Messages
-@onready var message_node=$Chat/Messages/templatemsg
+@onready var chat_window=$Chat/ScrollContainer/Messages
+@onready var message_node=$Chat/ScrollContainer/Messages/templatemsg
 @onready var msg_input=$Chat/Input/bg/message_input
+@onready var chat_scroll=$Chat/ScrollContainer
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var shooting_delay = 2
 var shooting_delay_cr = 0
-var message_written = false
 
 func _enter_tree():
 	name=str(get_multiplayer_authority())
@@ -52,6 +52,8 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("focus"):
 		msg_input.release_focus()
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	if Input.is_action_just_pressed("open_chat"):
+		chat.visible=not(chat.visible)
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		rotate_y(-event.relative.x*.005)
 		camera.rotate_x(-event.relative.y*.005)
@@ -110,6 +112,12 @@ func _physics_process(delta):
 	else:
 		queue_free()
 		print("queue_free()")
+	
+	if chat_scroll.has_focus():
+		var scroll = chat_scroll.get_v_scroll_bar()
+		var scroll_max = scroll.max_value
+		chat_scroll.scroll_vertical = scroll_max
+	
 		
 @rpc("unreliable")
 func remote_process(authority_position,authority_rotation,authority_cam_rotation,authority_invwd_rotation,authority_anim_player_current_animation,authority_invwd_visible ):
@@ -129,17 +137,16 @@ func update_properties(n,c):
 	tagwd.get_node("nick").set("theme_override_colors/font_color", c)
 	tagwd.get_node("nick").set("theme_override_colors/font_outline_color", Color(cc,cc,cc,1))
 	mesh.mesh.material.albedo_color=c
+	chat.visible=false
 	
 	
 func _on_message_input_text_submitted(new_text):
-	send_message(nicklabel.text,new_text,tagwd.get_node("nick").get("theme_override_colors/font_color"))
-	print(multiplayer.get_unique_id(), " sent rpc")
-	print(chat.visible)
 	send_message_rpc.rpc(nicklabel.text,new_text,tagwd.get_node("nick").get("theme_override_colors/font_color"))
 	msg_input.text=""
 
-func send_message(nick, message,color):
-	#print(tagwd.get_node("nick").text," : ", nick, " ", message, " ", color)
+@rpc("call_local")
+func send_message_rpc(nick, message,color):
+	if len(message)==0: return
 	var msg = message_node.duplicate()
 	var cc = 1-(color.r+color.g+color.b)/3.0
 	msg.get_node("nick").text=nick+":"
@@ -148,14 +155,16 @@ func send_message(nick, message,color):
 	msg.get_node("message").text=message
 	msg.get_node("message").set("theme_override_colors/font_color", color)
 	msg.get_node("message").set("theme_override_colors/font_outline_color", Color(cc,cc,cc))
+	
+	var player=get_parent().get_node(str(multiplayer.get_unique_id()))
+	
+	if(player.tagwd.get_node("nick").text==nick):
+		msg.get_node("nick").text="> "
+	
 	msg.visible=true
-	chat_window.add_child(msg)
-	#print(msg," : ", chat_window.get_children())
-
-@rpc
-func send_message_rpc(nick, message,color):
-	print(multiplayer.get_unique_id(), " recieved rpc")
-	print(chat.visible)
+	player.chat_window.add_child(msg)
 	
-		
-	
+	await get_tree().create_timer(0.1).timeout
+	var scroll = player.chat_scroll.get_v_scroll_bar()
+	var scroll_max = scroll.max_value
+	player.chat_scroll.scroll_vertical = scroll_max
