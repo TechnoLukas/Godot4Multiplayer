@@ -9,7 +9,7 @@ extends Node3D
 
 @onready var progresslb = $Loading/progress
 
-@onready var list = $player_list
+@onready var player_list = $player_list
 
 var notification_text="server closed"
 var kicked=false
@@ -40,7 +40,7 @@ func _connection_failed():
 
 func server_disconnected():
 	#print("server_disconnected")
-	for i in list.get_children(): list.remove_child(i)
+	for i in player_list.get_children(): player_list.remove_child(i)
 	show_notification(notification_text)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	#if not kicked:
@@ -69,7 +69,7 @@ func spawn_player(peer_id,properties):
 	player.set_multiplayer_authority(peer_id)
 	player.visible=false
 	player.position=Vector3(randf_range(-4.5,4.5),0.3,randf_range(-4.5,4.5))
-	list.add_child(player)
+	player_list.add_child(player)
 	player.update_properties(properties.nickname,properties.color)
 	#await get_tree().create_timer(0.05).timeout
 	player.change_visibility(true)
@@ -86,9 +86,9 @@ func spawn_old_players(database):
 @rpc
 func remove_player(peer_id,notifi_text):
 	if peer_id==multiplayer.get_unique_id(): notification_text=notifi_text
-	if list.get_node_or_null(str(peer_id)):
-		list.get_node(str(peer_id)).connection = false
-		list.remove_child(list.get_node(str(peer_id)))
+	if player_list.get_node_or_null(str(peer_id)):
+		player_list.get_node(str(peer_id)).connection = false
+		player_list.remove_child(player_list.get_node(str(peer_id)))
 		
 		
 # --------- POINTS ------------------
@@ -98,7 +98,14 @@ func share_point_properties(_p_position, _p_color):
 
 @rpc
 func spawn_new_point(properties):
-	var point = preload("res://paintball.tscn").instantiate()
+	var point = preload("res://voxel.tscn").instantiate()
+	point.position=properties[0]
+	point.get_child(0).material.albedo_color=properties[1]
+	get_parent().add_child(point)
+	
+
+func remove_point(properties):
+	var point = preload("res://voxel.tscn").instantiate()
 	point.position=properties[0]
 	point.get_child(0).material.albedo_color=properties[1]
 	get_parent().add_child(point)
@@ -109,7 +116,7 @@ func spawn_old_points(database,proggressn,finished):
 	loading_menu.visible=!finished
 	progresslb.text="loading %"+str(proggressn)+"\nplease wait"
 	for p in database:
-		var point = preload("res://paintball.tscn").instantiate()
+		var point = preload("res://voxel.tscn").instantiate()
 		point.position=p[0]
 		point.get_child(0).material.albedo_color=p[1]
 		get_parent().add_child(point)

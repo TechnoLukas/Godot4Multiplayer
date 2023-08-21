@@ -50,7 +50,10 @@ transform = Transform3D(0.735168, -0.253746, 0.628603, -0.0351182, 0.911798, 0.4
 environment = SubResource("Environment_o5wio")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 3, 0)
+transform = Transform3D(0.603138, -0.564014, 0.564014, 0, 0.707107, 0.707107, -0.797637, -0.426483, 0.426483, 0, 3, 0)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.796857, 0.427211, -0.427211, -7.22253e-09, 0.707107, 0.707107, 0.604168, 0.563463, -0.563463, 0, 3, 0)
 
 [node name="Menu" type="Control" parent="."]
 layout_mode = 3

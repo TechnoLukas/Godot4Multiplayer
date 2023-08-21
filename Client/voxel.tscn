@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://hrj13605alru"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyg2j"]
+resource_local_to_scene = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ojvtd"]
+resource_local_to_scene = true
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.796078, 0, 0.8, 1)
+grow = true
+grow_amount = 0.011
+
+[node name="voxel" type="Node3D"]
+
+[node name="voxel" type="CSGBox3D" parent="."]
+use_collision = true
+collision_layer = 2
+collision_mask = 0
+size = Vector3(0.1, 0.1, 0.1)
+material = SubResource("StandardMaterial3D_kyg2j")
+
+[node name="outline" type="CSGBox3D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 0
+size = Vector3(0.08, 0.08, 0.08)
+material = SubResource("StandardMaterial3D_ojvtd")

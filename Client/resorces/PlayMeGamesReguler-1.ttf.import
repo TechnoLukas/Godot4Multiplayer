@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://ffk7qru3grvi"
-path="res://.godot/imported/PlaymegamesReguler-2OOee.ttf-67b90d080bc7679a2fd0eb4b66196914.fontdata"
+uid="uid://bhh5npox5hdjq"
+path="res://.godot/imported/PlayMeGamesReguler-1.ttf-37f85dc393dd5408b615e0cc0bfa626b.fontdata"
 
 [deps]
 
-source_file="res://resorces/PlaymegamesReguler-2OOee.ttf"
-dest_files=["res://.godot/imported/PlaymegamesReguler-2OOee.ttf-67b90d080bc7679a2fd0eb4b66196914.fontdata"]
+source_file="res://resorces/PlayMeGamesReguler-1.ttf"
+dest_files=["res://.godot/imported/PlayMeGamesReguler-1.ttf-37f85dc393dd5408b615e0cc0bfa626b.fontdata"]
 
 [params]
 
