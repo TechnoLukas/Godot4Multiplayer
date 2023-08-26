@@ -5,3 +5,13 @@
 WebExport/butler.exe
 *.dll
 *.bat
+WebExport/game/game.zip
+WebExport/game/index.apple-touch-icon.png
+WebExport/game/index.audio.worklet.js
+WebExport/game/index.html
+WebExport/game/index.icon.png
+WebExport/game/index.js
+WebExport/game/index.png
+WebExport/game/index.wasm
+WebExport/game/index.worker.js
+WebExport/game/www.godot-games.info.crt

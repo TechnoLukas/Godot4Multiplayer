@@ -10,6 +10,9 @@ extends Node3D
 @onready var progresslb = $Loading/progress
 
 @onready var player_list = $player_list
+@onready var point_list = $point_list
+
+var point_database = []
 
 var notification_text="server closed"
 var kicked=false
@@ -21,6 +24,7 @@ var peer = WebSocketMultiplayerPeer.new()
 
 func _ready():
 	colornp.color = Color(randf_range(0,1),randf_range(0,1),randf_range(0,1))
+	Input.start_joy_vibration(0, 1, 1, 2)
 	
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:
@@ -28,7 +32,12 @@ func _on_joinbt_pressed():
 		#peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 		#peer.create_client("ws://" + "ec2-16-171-197-200.eu-north-1.compute.amazonaws.com" + ":" + str(PORT))
 		#peer.create_client("wss://" + "www.godot-games.info:8080/")
-		peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/")
+		
+		var client_trusted_cas = load("www.godot-games.info.crt")
+		var client_tls_options = TLSOptions.client(client_trusted_cas)
+		
+		peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/",client_tls_options)
+		#peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/")
 		multiplayer.multiplayer_peer = peer
 		multiplayer.server_disconnected.connect(server_disconnected)
 		multiplayer.connection_failed.connect(_connection_failed)
@@ -95,20 +104,31 @@ func remove_player(peer_id,notifi_text):
 @rpc("any_peer")
 func share_point_properties(_p_position, _p_color):
 	pass
+	
+@rpc("any_peer")
+func share_point_index_rm(_index,_node):
+	pass
+	
+	
+func get_point_index(p_position,node):
+	for i in range(point_database.size()):
+		if point_database[i][0]==p_position:
+			share_point_index_rm.rpc_id(1,i)
+			
 
 @rpc
 func spawn_new_point(properties):
 	var point = preload("res://voxel.tscn").instantiate()
 	point.position=properties[0]
 	point.get_child(0).material.albedo_color=properties[1]
-	get_parent().add_child(point)
+	point_list.add_child(point)
+	point_database.append(properties)
 	
-
-func remove_point(properties):
-	var point = preload("res://voxel.tscn").instantiate()
-	point.position=properties[0]
-	point.get_child(0).material.albedo_color=properties[1]
-	get_parent().add_child(point)
+@rpc
+func remove_point(index):
+	if point_list.get_child_count()>index: point_list.remove_child(point_list.get_child(index))
+	if point_database.size()>index: point_database.remove_at(index)
+	
 	
 @rpc
 func spawn_old_points(database,proggressn,finished):
@@ -119,7 +139,8 @@ func spawn_old_points(database,proggressn,finished):
 		var point = preload("res://voxel.tscn").instantiate()
 		point.position=p[0]
 		point.get_child(0).material.albedo_color=p[1]
-		get_parent().add_child(point)
+		point_list.add_child(point)
+		point_database.append(p)
 		
 	update_loading_stat.rpc(multiplayer.get_unique_id(),"ready")
 		

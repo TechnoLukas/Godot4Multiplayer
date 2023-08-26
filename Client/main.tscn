@@ -1,9 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://e8xbpgk2y3i3"]
+[gd_scene load_steps=31 format=3 uid="uid://e8xbpgk2y3i3"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_j6oyd"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hsw82"]
-albedo_color = Color(0.294118, 0.372549, 0.521569, 1)
+[ext_resource type="Shader" uid="uid://bq2eo8u2pu2f" path="res://main.tres" id="2_2x24l"]
+[ext_resource type="Script" path="res://rotating.gd" id="3_7lwxl"]
+[ext_resource type="PackedScene" uid="uid://44h2o1w6qkqg" path="res://resorces/land.tscn" id="3_k6qj4"]
 
 [sub_resource type="Environment" id="Environment_o5wio"]
 background_mode = 1
@@ -35,13 +35,139 @@ corner_radius_bottom_left = 4
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mqmdb"]
 bg_color = Color(1, 1, 1, 0)
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4hx1b"]
+render_priority = 0
+shader = ExtResource("2_2x24l")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_buxf1"]
+noise_type = 0
+metadata/_preview_in_3d_space_ = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_gvqqu"]
+seamless = true
+noise = SubResource("FastNoiseLite_buxf1")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_ft0ai"]
+texture = SubResource("NoiseTexture2D_gvqqu")
+
+[sub_resource type="Gradient" id="Gradient_dbsjf"]
+offsets = PackedFloat32Array(0.394958, 0.420168)
+colors = PackedColorArray(0.0324484, 0.0324484, 0.0324484, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_spesj"]
+gradient = SubResource("Gradient_dbsjf")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_6xqbx"]
+texture = SubResource("GradientTexture1D_spesj")
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_sxrce"]
+operator = 2
+
+[sub_resource type="Gradient" id="Gradient_2o26h"]
+offsets = PackedFloat32Array(0.331933, 0.497199)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_jts76"]
+gradient = SubResource("Gradient_2o26h")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_aogrm"]
+texture = SubResource("GradientTexture1D_jts76")
+
+[sub_resource type="Gradient" id="Gradient_3sf1p"]
+colors = PackedColorArray(0.927328, 0.661054, 0.6378, 1, 1, 0.745098, 0.301961, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_2ml1w"]
+gradient = SubResource("Gradient_3sf1p")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_fo2d6"]
+texture = SubResource("GradientTexture1D_2ml1w")
+
+[sub_resource type="Gradient" id="Gradient_3mnah"]
+colors = PackedColorArray(0.513233, 0.513233, 0.513233, 1, 0.943848, 0.887818, 0.834742, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5jh7a"]
+gradient = SubResource("Gradient_3mnah")
+
+[sub_resource type="VisualShaderNodeTexture" id="VisualShaderNodeTexture_lbqyr"]
+texture = SubResource("GradientTexture1D_5jh7a")
+
+[sub_resource type="VisualShaderNodeVectorOp" id="VisualShaderNodeVectorOp_0200b"]
+operator = 2
+
+[sub_resource type="VisualShader" id="VisualShader_ijhbh"]
+code = "shader_type spatial;
+render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+
+uniform sampler2D tex_frg_15;
+uniform sampler2D tex_frg_20;
+uniform sampler2D tex_frg_18;
+uniform sampler2D tex_frg_16;
+uniform sampler2D tex_frg_19;
+
+
+
+void fragment() {
+// Texture2D:15
+	vec4 n_out15p0 = texture(tex_frg_15, UV);
+
+
+// Texture2D:20
+	vec4 n_out20p0 = texture(tex_frg_20, vec2(n_out15p0.xy));
+
+
+// Texture2D:18
+	vec4 n_out18p0 = texture(tex_frg_18, vec2(n_out15p0.xy));
+
+
+// Texture2D:16
+	vec4 n_out16p0 = texture(tex_frg_16, vec2(n_out15p0.xy));
+
+
+// VectorOp:17
+	vec3 n_out17p0 = vec3(n_out18p0.xyz) * vec3(n_out16p0.xyz);
+
+
+// Texture2D:19
+	vec4 n_out19p0 = texture(tex_frg_19, vec2(n_out17p0.xy));
+
+
+// VectorOp:21
+	vec3 n_out21p0 = vec3(n_out20p0.xyz) * vec3(n_out19p0.xyz);
+
+
+// Output:0
+	ALBEDO = n_out21p0;
+
+
+}
+"
+nodes/fragment/0/position = Vector2(1440, -20)
+nodes/fragment/15/node = SubResource("VisualShaderNodeTexture_ft0ai")
+nodes/fragment/15/position = Vector2(-1040, 0)
+nodes/fragment/16/node = SubResource("VisualShaderNodeTexture_6xqbx")
+nodes/fragment/16/position = Vector2(-460, 600)
+nodes/fragment/17/node = SubResource("VisualShaderNodeVectorOp_sxrce")
+nodes/fragment/17/position = Vector2(-3.99698, 415.714)
+nodes/fragment/18/node = SubResource("VisualShaderNodeTexture_aogrm")
+nodes/fragment/18/position = Vector2(-440, 260)
+nodes/fragment/19/node = SubResource("VisualShaderNodeTexture_fo2d6")
+nodes/fragment/19/position = Vector2(340, 460)
+nodes/fragment/20/node = SubResource("VisualShaderNodeTexture_lbqyr")
+nodes/fragment/20/position = Vector2(320, 0)
+nodes/fragment/21/node = SubResource("VisualShaderNodeVectorOp_0200b")
+nodes/fragment/21/position = Vector2(740, 320)
+nodes/fragment/connections = PackedInt32Array(15, 0, 20, 0, 16, 0, 17, 1, 15, 0, 16, 0, 15, 0, 18, 0, 18, 0, 17, 0, 20, 0, 21, 0, 21, 0, 0, 0, 19, 0, 21, 1, 17, 0, 19, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sqk0g"]
+render_priority = 0
+shader = SubResource("VisualShader_ijhbh")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_aarql"]
+height = 0.705
+radius = 9.6
+
 [node name="main" type="Node3D"]
 script = ExtResource("1_j6oyd")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-material_override = SubResource("StandardMaterial3D_hsw82")
-use_collision = true
-size = Vector3(20, 0.1, 20)
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(0.735168, -0.253746, 0.628603, -0.0351182, 0.911798, 0.409135, -0.676975, -0.322858, 0.661413, 5, 3, 5)
@@ -70,6 +196,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.999039, 1)
 color = Color(0.211765, 0.211765, 0.211765, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
@@ -98,7 +225,7 @@ visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 50
-text = "localhost"
+text = "wss://www.godot-games.info"
 placeholder_text = "wss://www.godot-games.info"
 alignment = 1
 
@@ -111,6 +238,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_lk1rc")
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 50
+text = "Player"
 placeholder_text = "nickname"
 alignment = 1
 max_length = 10
@@ -238,5 +366,28 @@ text = "loading %8
 please wait"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="point_list" type="Node3D" parent="."]
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="."]
+radius = 30.0
+rings = 20
+material = SubResource("ShaderMaterial_4hx1b")
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, 0)
+radius = 0.8
+radial_segments = 10
+rings = 10
+material = SubResource("ShaderMaterial_sqk0g")
+script = ExtResource("3_7lwxl")
+
+[node name="land" parent="." instance=ExtResource("3_k6qj4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("CylinderShape3D_aarql")
 
 [connection signal="pressed" from="Menu/VBoxContainer/joinbt" to="." method="_on_joinbt_pressed"]

@@ -1,7 +1,7 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
+const SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 var placing = false
 var removing = false
@@ -19,38 +19,39 @@ var removing = false
 @onready var invwd = $invwd
 @onready var hint = $hint
 @onready var voxelmn = $voxelmenu
+@onready var settingsmn = $settingsmenu
 
 
 @onready var chat = $Chat
 @onready var chat_window=$Chat/ScrollContainer/Messages
+
 @onready var message_node=$Chat/ScrollContainer/Messages/templatemsg
 @onready var msg_input=$Chat/Input/bg/message_input
 @onready var chat_scroll=$Chat/ScrollContainer
 
 var voxel=null
 var place_on_edges=false
-var mouse_focus = false
+var mouse_focus = true
+var y_reversed = false
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var voxel_delay = 5
 var voxel_delay_cr = 0
-var mouse_sensitivity = 0.005
+var rotation_sensitivity = 0.005
+var rotation_shift = Vector3(0,0,0)
+
+var player_color = Color(0,0,0)
+var player_nickname = ""
 
 func _enter_tree():
 	name=str(get_multiplayer_authority())
 	
 func _ready():
 	if not is_multiplayer_authority(): return
-	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
+
 	camera.current=true
-	invwd.visible=false
 	connection=true
-	hint.visible=true
-	tagwd.visible=false
-	chat.visible=true
-	voxelmn.visible=true
 	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -58,21 +59,41 @@ func _unhandled_input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if Input.is_action_just_released("focus"):
-		if(DisplayServer.mouse_get_mode() == DisplayServer.MOUSE_MODE_HIDDEN):
-			DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_VISIBLE)
+		if mouse_focus:
+			#DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_VISIBLE)
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			mouse_focus=false
-		elif(DisplayServer.mouse_get_mode() == DisplayServer.MOUSE_MODE_VISIBLE):
-			DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
+		elif !mouse_focus:
+			#DisplayServer.mouse_set_mode(DisplayServer.MOUSE_MODE_HIDDEN)
+			Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 			mouse_focus=true
-			msg_input.release_focus()
 			
 		msg_input.release_focus()
 	if Input.is_action_just_pressed("open_chat"):
 		chat.visible=not(chat.visible)
 	if event is InputEventMouseMotion and mouse_focus:
-		rotate_y(-event.relative.x*mouse_sensitivity)
-		camera.rotate_x(-event.relative.y*mouse_sensitivity)
+		rotate_y(-event.relative.x*rotation_sensitivity)
+		camera.rotate_x(-event.relative.y*rotation_sensitivity)
 		camera.rotation.x=clamp(camera.rotation.x,-PI/2,PI/2)
+	
+	
+	if event is InputEventJoypadMotion:
+		print(event.axis)
+		if event.axis==2: 
+			var rot = -event.axis_value*rotation_sensitivity*6.0
+			if mouse_focus: rotate_y(rot)
+			rotation_shift.y=rot
+		if event.axis==3:
+			var rot
+			if y_reversed:
+				rot = event.axis_value*rotation_sensitivity*6.0
+			else:
+				rot = -event.axis_value*rotation_sensitivity*6.0
+			
+			if snappedf(rot, 0.001) == 0.0: rot=0
+			if mouse_focus: camera.rotate_x(rot)
+			rotation_shift.x=rot
+			print(rot," ",snappedf(rot, 0.001))
 		
 	if Input.is_action_just_pressed("place") and mouse_focus:
 			anim_player.stop()
@@ -100,17 +121,22 @@ func _physics_process(delta):
 	
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor() and mouse_focus:
+	if Input.is_action_pressed("jump") and is_on_floor() and mouse_focus:
 		velocity.y = JUMP_VELOCITY
 
 	var input_dir = Input.get_vector("left", "right", "forward", "backward")
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y))
 	if direction and mouse_focus:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+		
+	if mouse_focus:
+		rotate_y(rotation_shift.y)
+		camera.rotate_x(rotation_shift.x)
+		camera.rotation.x=clamp(camera.rotation.x,-PI/2,PI/2)
 	
 	if anim_player.current_animation == "place" :
 		pass
@@ -126,7 +152,7 @@ func _physics_process(delta):
 	if placing and voxel_delay_cr>voxel_delay and camera_raycast.get_collider()==null:
 		var markerpos=$Camera3D/Pistol/Marker3D.global_position
 		
-		get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(snappedf(markerpos.x,snp),snappedf(markerpos.y,snp),snappedf(markerpos.z,snp)),mesh.mesh.material.albedo_color)
+		get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(snappedf(markerpos.x,snp),snappedf(markerpos.y,snp),snappedf(markerpos.z,snp)),player_color)
 		voxel_delay_cr=0
 	elif placing and voxel_delay_cr>voxel_delay and camera_raycast.get_collider()!=null:
 		if str(camera_raycast.get_collider()).split(":")[0]=="voxel":
@@ -137,23 +163,18 @@ func _physics_process(delta):
 				var norm_dis=dis.normalized()
 				var shift=Vector3(snappedf(norm_dis.x,1)/10,snappedf(norm_dis.y,1)/10,snappedf(norm_dis.z,1)/10)
 				var pos=target_pos+shift
-				print(target_pos," ",collision_pos," ",dis," ",shift)
-				get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(pos.x,pos.y,pos.z),mesh.mesh.material.albedo_color)
+				get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(pos.x,pos.y,pos.z),player_color)
 			else:
 				var target_pos=camera_raycast.get_collider().get_parent().position
 				var collision_pos=camera_raycast.get_collision_point()
 				var dis=collision_pos-target_pos
-				var norm_dis=dis.normalized()
 				var dis_snap=Vector3(snappedf(dis.x,0.01),snappedf(dis.y,0.01),snappedf(dis.z,0.01))
 				var shift=Vector3(0,0,0)
-				print("1",dis_snap)
-				print(abs(snappedf(dis.x,0.01))*2.)
 				if abs(snappedf(dis.x,0.01)) == 0.05: shift.x=snappedf(dis.x,0.01)*2.; 
 				if abs(snappedf(dis.y,0.01)) == 0.05: shift.y=snappedf(dis.y,0.01)*2.; 
 				if abs(snappedf(dis.z,0.01)) == 0.05: shift.z=snappedf(dis.z,0.01)*2.; 
 				var pos=target_pos+shift
-				print("2",shift)
-				get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(pos.x,pos.y,pos.z),mesh.mesh.material.albedo_color)
+				get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(pos.x,pos.y,pos.z),player_color)
 
 			"""
 			var collision_pos=camera_raycast.get_collision_point()#camera_raycast.get_collider().get_parent().global_position
@@ -174,17 +195,20 @@ func _physics_process(delta):
 			var y = -dis * cos(deg_to_rad(angle))
 			
 			var pos =collision_pos+(camera_raycast.get_collision_point().direction_to(camera.global_position))/18
-			get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(snappedf(pos.x,snp),snappedf(pos.y,snp),snappedf(pos.z,snp)),mesh.mesh.material.albedo_color)
+			get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(snappedf(pos.x,snp),snappedf(pos.y,snp),snappedf(pos.z,snp)),player_color)
 
 		voxel_delay_cr=0
-	elif voxel_delay_cr<=voxel_delay:
+		
+	if removing and voxel_delay_cr>voxel_delay and camera_raycast.get_collider()!=null:
+		get_parent().get_parent().get_point_index(camera_raycast.get_collider().global_position,camera_raycast.get_collider())
+		voxel_delay_cr=0
+	if voxel_delay_cr<=voxel_delay:
 		voxel_delay_cr=voxel_delay_cr+1
 		
 	if connection:
 		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
 	else:
 		queue_free()
-		print("queue_free()")
 	
 	if chat_scroll.has_focus():
 		var scroll = chat_scroll.get_v_scroll_bar()
@@ -200,7 +224,6 @@ func _physics_process(delta):
 		collider=null
 		
 	if voxel!=collider:
-		print("new")
 		if voxel!=null: 
 			voxel.get_node("voxel").material.albedo_color=voxel.get_node("outline").material.albedo_color
 			voxel.get_node("outline").material.albedo_color=Color(1,1,1)
@@ -210,7 +233,10 @@ func _physics_process(delta):
 			voxel.get_node("outline").visible=true
 			voxel.get_node("outline").material.albedo_color=voxel.get_node("voxel").material.albedo_color
 			voxel.get_node("voxel").material.albedo_color=Color(1,1,1)
-
+	
+	if global_position.y<-4:
+		Input.start_joy_vibration(0, 1, 1, 2)
+		global_position=Vector3(0,3,0)
 	
 		
 @rpc("unreliable")
@@ -231,8 +257,28 @@ func update_properties(n,c):
 	tagwd.get_node("nick").set("theme_override_colors/font_color", c)
 	tagwd.get_node("nick").set("theme_override_colors/font_outline_color", Color(cc,cc,cc,1))
 	mesh.mesh.material.albedo_color=c
+	player_color=c
+	
 	chat.visible=false
-	#voxelmn.visible=false
+	invwd.visible=false
+	hint.visible=false
+	tagwd.visible=true
+	chat.visible=false
+	voxelmn.visible=false
+	settingsmn.visible=false
+	
+	update_self_properties()
+	
+func update_self_properties():
+	if not is_multiplayer_authority(): return
+	invwd.visible=false
+	hint.visible=true
+	tagwd.visible=false
+	chat.visible=false
+	voxelmn.visible=true
+	settingsmn.visible=true
+	
+	
 	
 	
 func _on_message_input_text_submitted(new_text):
@@ -269,5 +315,14 @@ func _on_check_box_pressed():
 	place_on_edges=!place_on_edges
 	
 
-func _on_h_slider_value_changed(value):
+
+func _on_vxdl_slider_value_changed(value):
 	voxel_delay=value
+
+
+func _on_rs_slider_value_changed(value):
+	rotation_sensitivity=value
+
+
+func _on_y_reversed_pressed():
+	y_reversed=!y_reversed

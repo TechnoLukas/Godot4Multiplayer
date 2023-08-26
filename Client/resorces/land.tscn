@@ -1,0 +1,27 @@
+[gd_scene load_steps=8 format=3 uid="uid://44h2o1w6qkqg"]
+
+[ext_resource type="PackedScene" uid="uid://b25s4shwyg3qh" path="res://resorces/land.gltf" id="1_5nb55"]
+[ext_resource type="Shader" uid="uid://cqm02y2617mvs" path="res://land.tres" id="2_jn7ts"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_wku6g"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_c5enu"]
+noise = SubResource("FastNoiseLite_wku6g")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k3c1v"]
+noise_type = 3
+frequency = 0.0386
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_vjxp2"]
+noise = SubResource("FastNoiseLite_k3c1v")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_nw8qh"]
+render_priority = 0
+shader = ExtResource("2_jn7ts")
+shader_parameter/NoiseTex = SubResource("NoiseTexture2D_c5enu")
+shader_parameter/Rocks = SubResource("NoiseTexture2D_vjxp2")
+
+[node name="land" instance=ExtResource("1_5nb55")]
+
+[node name="land2" parent="." index="0"]
+material_override = SubResource("ShaderMaterial_nw8qh")

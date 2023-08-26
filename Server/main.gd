@@ -7,7 +7,7 @@ var playerloadingprog = {}
 var playerloadingstat = {}
 var database = {}
 var pointsdatabase = []
-var wws_version=false
+var wws_version=true
 
 @onready var list = $player_list
 
@@ -19,10 +19,10 @@ func _ready():
 	load_pointdatabase()
 	if wws_version:
 		print("-- WWS Build Version --")
-		var server_certs = load("apache-selfsigned.crt")
-		var server_key = load("apache-selfsigned.key")
+		var server_certs = load("www.godot-games.info.crt")
+		var server_key = load("www.godot-games.info.key")
 		var server_tls = TLSOptions.server(server_key, server_certs)
-
+		print(server_tls)
 		peer.create_server(PORT,"*",server_tls)
 
 		
@@ -120,6 +120,17 @@ func share_point_properties(p_position, p_color):
 	spawn_new_point.rpc([p_position,p_color])
 	print(pointsdatabase.size())
 	save_pointdatabase()
+	
+@rpc("any_peer")
+func share_point_index_rm(index):
+	print("share_point_index_rm")
+	if pointsdatabase.size()>index: pointsdatabase.remove_at(index)
+	save_pointdatabase()
+	remove_point.rpc(index)
+	
+@rpc
+func remove_point(_index):
+	pass
 	
 
 @rpc("any_peer")
