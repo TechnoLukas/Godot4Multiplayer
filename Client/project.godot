@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 Global="*res://global.gd"
 
+[debug]
+
+file_logging/use_physical_light_units=false
+file_logging/threads/thread_model=1
+
 [display]
 
 window/size/viewport_width=1920

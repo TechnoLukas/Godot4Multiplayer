@@ -24,6 +24,7 @@ var peer = WebSocketMultiplayerPeer.new()
 
 func _ready():
 	colornp.color = Color(randf_range(0,1),randf_range(0,1),randf_range(0,1))
+	nicknamenp.text="Player#"+str(randi_range(0,9))+str(randi_range(0,9))+str(randi_range(0,9))
 	Input.start_joy_vibration(0, 1, 1, 2)
 	
 func _on_joinbt_pressed():
@@ -123,6 +124,7 @@ func spawn_new_point(properties):
 	point.get_child(0).material.albedo_color=properties[1]
 	point_list.add_child(point)
 	point_database.append(properties)
+	get_node("player_list").get_node(str(multiplayer.get_unique_id())).update_points_properties()
 	
 @rpc
 func remove_point(index):

@@ -1,0 +1,30 @@
+[gd_scene load_steps=8 format=3 uid="uid://cxivx72i5vnax"]
+
+[ext_resource type="PackedScene" uid="uid://bs730bnlbrssg" path="res://resorces/voxelcapsule.gltf" id="1_menud"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yex2v"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cb57p"]
+albedo_color = Color(0.372549, 0.372549, 0.372549, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_be20f"]
+albedo_color = Color(0.878431, 0.878431, 0.878431, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_esr7h"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2hw2q"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sjo7v"]
+albedo_color = Color(0.223529, 0.223529, 0.223529, 1)
+
+[node name="voxelcapsule" instance=ExtResource("1_menud")]
+
+[node name="voxelcapsule_002" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_yex2v")
+surface_material_override/1 = SubResource("StandardMaterial3D_cb57p")
+surface_material_override/2 = SubResource("StandardMaterial3D_be20f")
+surface_material_override/3 = SubResource("StandardMaterial3D_esr7h")
+surface_material_override/4 = SubResource("StandardMaterial3D_2hw2q")
+surface_material_override/5 = SubResource("StandardMaterial3D_sjo7v")

@@ -8,7 +8,7 @@ var removing = false
 
 @export var connection =false
 
-@export var mesh:CSGMesh3D
+@export var mesh:MeshInstance3D
 @export var nicklabel:Label
 
 @onready var camera = $Camera3D
@@ -17,10 +17,6 @@ var removing = false
 
 @onready var tagwd = $tagviewport/window
 @onready var invwd = $invwd
-@onready var hint = $hint
-@onready var voxelmn = $voxelmenu
-@onready var settingsmn = $settingsmenu
-
 
 @onready var chat = $Chat
 @onready var chat_window=$Chat/ScrollContainer/Messages
@@ -28,11 +24,17 @@ var removing = false
 @onready var message_node=$Chat/ScrollContainer/Messages/templatemsg
 @onready var msg_input=$Chat/Input/bg/message_input
 @onready var chat_scroll=$Chat/ScrollContainer
+@onready var fps_counter=$StaticUI/statsmenu/VBoxContainer/Label
+
+
+@onready var st_ui=$StaticUI
+
 
 var voxel=null
 var place_on_edges=false
 var mouse_focus = true
 var y_reversed = false
+var input_dir
 
 var invwd_rtshift = 0
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
@@ -44,14 +46,19 @@ var rotation_shift = Vector3(0,0,0)
 var player_color = Color(0,0,0)
 var player_nickname = ""
 
+var t=0.0
+
 func _enter_tree():
 	name=str(get_multiplayer_authority())
+	update_self_properties()
 	
 func _ready():
 	if not is_multiplayer_authority(): return
 
 	camera.current=true
 	connection=true
+	
+	update_self_properties()
 	
 func _unhandled_input(event):
 	if not is_multiplayer_authority(): return
@@ -124,7 +131,7 @@ func _physics_process(delta):
 	if Input.is_action_pressed("jump") and is_on_floor() and mouse_focus:
 		velocity.y = JUMP_VELOCITY
 
-	var input_dir = Input.get_vector("left", "right", "forward", "backward")
+	input_dir = Input.get_vector("left", "right", "forward", "backward")
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y))
 	if direction and mouse_focus:
 		velocity.x = direction.x * SPEED
@@ -150,7 +157,7 @@ func _physics_process(delta):
 	invwd.rotation_degrees.y = 	-rotation_degrees.y+invwd_rtshift
 	var snp = 0.1
 	if placing and voxel_delay_cr>voxel_delay and camera_raycast.get_collider()==null:
-		var markerpos=$Camera3D/Pistol/Marker3D.global_position
+		var markerpos=$Camera3D/Marker3D.global_position
 		
 		get_parent().get_parent().share_point_properties.rpc_id(1,Vector3(snappedf(markerpos.x,snp),snappedf(markerpos.y,snp),snappedf(markerpos.z,snp)),player_color)
 		voxel_delay_cr=0
@@ -204,17 +211,11 @@ func _physics_process(delta):
 		voxel_delay_cr=0
 	if voxel_delay_cr<=voxel_delay:
 		voxel_delay_cr=voxel_delay_cr+1
-		
-	if connection:
-		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
-	else:
-		queue_free()
 	
 	if chat_scroll.has_focus():
 		var scroll = chat_scroll.get_v_scroll_bar()
 		var scroll_max = scroll.max_value
 		chat_scroll.scroll_vertical = scroll_max
-		
 	
 	# Highlight
 	var collider
@@ -237,6 +238,20 @@ func _physics_process(delta):
 	if global_position.y<-4:
 		Input.start_joy_vibration(0, 1, 1, 2)
 		global_position=Vector3(0,3,0)
+		
+	var angle=5
+	print(input_dir.normalized())
+	#rotation_degrees=Vector3(input_dir.normalized().y*angle,rotation_degrees.y,-input_dir.normalized().x*angle)
+	t = delta * 6
+	if mouse_focus: rotation_degrees=rotation_degrees.lerp(Vector3(input_dir.normalized().y*angle,rotation_degrees.y,-input_dir.normalized().x*angle),t)
+	#rotation_degrees.x=rotation_degrees.x.lerp()
+	
+	fps_counter.text="FPS:"+str(Engine.get_frames_per_second())
+		
+	if connection:
+		remote_process.rpc(global_position,global_rotation,camera.global_rotation,invwd.global_rotation,anim_player.current_animation,invwd.visible)
+	else:
+		queue_free()
 	
 		
 @rpc("unreliable")
@@ -256,27 +271,29 @@ func update_properties(n,c):
 	tagwd.get_node("nick").text=n
 	tagwd.get_node("nick").set("theme_override_colors/font_color", c)
 	tagwd.get_node("nick").set("theme_override_colors/font_outline_color", Color(cc,cc,cc,1))
-	mesh.mesh.material.albedo_color=c
+	#mesh.mesh.material.albedo_color=c
+	var mat = mesh.get_surface_override_material(0)
+	mat.albedo_color=c
+	mesh.set_surface_override_material(0,mat)
 	player_color=c
 	
 	chat.visible=false
 	invwd.visible=false
-	hint.visible=false
 	tagwd.visible=true
-	chat.visible=false
-	voxelmn.visible=false
-	settingsmn.visible=false
+	mesh.visible=true
+	
+	st_ui.visible=false
 	
 	update_self_properties()
 	
 func update_self_properties():
 	if not is_multiplayer_authority(): return
 	invwd.visible=false
-	hint.visible=true
 	tagwd.visible=false
 	chat.visible=false
-	voxelmn.visible=true
-	settingsmn.visible=true
+	mesh.visible=false
+	
+	st_ui.visible=true
 	
 	
 	
@@ -326,3 +343,32 @@ func _on_rs_slider_value_changed(value):
 
 func _on_y_reversed_pressed():
 	y_reversed=!y_reversed
+
+func  update_points_properties():
+	if not is_multiplayer_authority(): return
+	var vxs = get_parent().get_parent().get_node("point_list").get_children()
+	print("update_points_properties ",vxs[0].get_node("voxel").material.shading_mode)
+	if vxs[0].get_node("voxel").material.shading_mode == 1:
+		get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode = 1
+	if vxs[0].get_node("voxel").material.shading_mode == 0:
+		get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode = 0
+	
+	get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").visibility_range_end=get_parent().get_parent().get_node("point_list").get_children()[0].get_node("voxel").visibility_range_end
+		
+	print(vxs[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode)
+
+
+func _on_vx_sd_st_pressed():
+	print(get_parent().get_parent().get_node("point_list").get_child_count())
+	if get_parent().get_parent().get_node("point_list").get_children()[0].get_node("voxel").material.shading_mode == 0:
+		for vx in get_parent().get_parent().get_node("point_list").get_children():
+				vx.get_node("voxel").material.shading_mode=1
+	else:
+		for vx in get_parent().get_parent().get_node("point_list").get_children():
+				vx.get_node("voxel").material.shading_mode=0		
+
+
+func _on_vxrd_slider_value_changed(value):
+	for vx in get_parent().get_parent().get_node("point_list").get_children():
+		vx.get_node("voxel").visibility_range_end=value
+	
