@@ -34,11 +34,11 @@ func _on_joinbt_pressed():
 		#peer.create_client("ws://" + "ec2-16-171-197-200.eu-north-1.compute.amazonaws.com" + ":" + str(PORT))
 		#peer.create_client("wss://" + "www.godot-games.info:8080/")
 		
-		var client_trusted_cas = load("www.godot-games.info.crt")
-		var client_tls_options = TLSOptions.client(client_trusted_cas)
+		#var client_trusted_cas = load("www.godot-games.info.crt")
+		#var client_tls_options = TLSOptions.client(client_trusted_cas)
 		
-		peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/",client_tls_options)
-		#peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/")
+		#peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/",client_tls_options)
+		peer.create_client($Menu/VBoxContainer/addressinp.text + ":" + str(PORT)+"/")
 		multiplayer.multiplayer_peer = peer
 		multiplayer.server_disconnected.connect(server_disconnected)
 		multiplayer.connection_failed.connect(_connection_failed)

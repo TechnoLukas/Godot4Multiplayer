@@ -26,13 +26,12 @@ var removing = false
 @onready var chat_scroll=$Chat/ScrollContainer
 @onready var fps_counter=$StaticUI/statsmenu/VBoxContainer/Label
 
-
 @onready var st_ui=$StaticUI
 
 
 var voxel=null
 var place_on_edges=false
-var mouse_focus = true
+var mouse_focus = false
 var y_reversed = false
 var input_dir
 
@@ -45,6 +44,9 @@ var rotation_shift = Vector3(0,0,0)
 
 var player_color = Color(0,0,0)
 var player_nickname = ""
+
+var voxel_distance = 0
+var voxel_is_shaded = true
 
 var t=0.0
 
@@ -85,7 +87,6 @@ func _unhandled_input(event):
 	
 	
 	if event is InputEventJoypadMotion:
-		print(event.axis)
 		if event.axis==2: 
 			var rot = -event.axis_value*rotation_sensitivity*6.0
 			if mouse_focus: rotate_y(rot)
@@ -100,7 +101,6 @@ func _unhandled_input(event):
 			if snappedf(rot, 0.001) == 0.0: rot=0
 			if mouse_focus: camera.rotate_x(rot)
 			rotation_shift.x=rot
-			print(rot," ",snappedf(rot, 0.001))
 		
 	if Input.is_action_just_pressed("place") and mouse_focus:
 			anim_player.stop()
@@ -240,7 +240,6 @@ func _physics_process(delta):
 		global_position=Vector3(0,3,0)
 		
 	var angle=5
-	print(input_dir.normalized())
 	#rotation_degrees=Vector3(input_dir.normalized().y*angle,rotation_degrees.y,-input_dir.normalized().x*angle)
 	t = delta * 6
 	if mouse_focus: rotation_degrees=rotation_degrees.lerp(Vector3(input_dir.normalized().y*angle,rotation_degrees.y,-input_dir.normalized().x*angle),t)
@@ -346,29 +345,27 @@ func _on_y_reversed_pressed():
 
 func  update_points_properties():
 	if not is_multiplayer_authority(): return
-	var vxs = get_parent().get_parent().get_node("point_list").get_children()
-	print("update_points_properties ",vxs[0].get_node("voxel").material.shading_mode)
-	if vxs[0].get_node("voxel").material.shading_mode == 1:
+	if voxel_is_shaded:
 		get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode = 1
-	if vxs[0].get_node("voxel").material.shading_mode == 0:
+	else:
 		get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode = 0
-	
-	get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").visibility_range_end=get_parent().get_parent().get_node("point_list").get_children()[0].get_node("voxel").visibility_range_end
 		
-	print(vxs[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").material.shading_mode)
+	get_parent().get_parent().get_node("point_list").get_children()[get_parent().get_parent().get_node("point_list").get_child_count()-1].get_node("voxel").visibility_range_end=voxel_distance
 
 
 func _on_vx_sd_st_pressed():
-	print(get_parent().get_parent().get_node("point_list").get_child_count())
 	if get_parent().get_parent().get_node("point_list").get_children()[0].get_node("voxel").material.shading_mode == 0:
 		for vx in get_parent().get_parent().get_node("point_list").get_children():
 				vx.get_node("voxel").material.shading_mode=1
 	else:
 		for vx in get_parent().get_parent().get_node("point_list").get_children():
 				vx.get_node("voxel").material.shading_mode=0		
+	
+	voxel_is_shaded=!voxel_is_shaded
 
 
 func _on_vxrd_slider_value_changed(value):
 	for vx in get_parent().get_parent().get_node("point_list").get_children():
 		vx.get_node("voxel").visibility_range_end=value
+	voxel_distance=value
 	

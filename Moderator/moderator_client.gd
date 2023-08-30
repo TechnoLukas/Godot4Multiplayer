@@ -1,6 +1,6 @@
 extends Node
 
-var ip = "localhost"
+var ip = "www.godot-games.info"
 var port = 4242
 var connection
 var connected = false
