@@ -1,5 +1,6 @@
 # Godot4Multiplayer
 Headless + Client Multiplayer in Godot 4
+discord server for this project https://discord.gg/fuJCJFRX
 
 Written using WebSocket and using rpc due to lack of possibilities with sync nodes. 
 
