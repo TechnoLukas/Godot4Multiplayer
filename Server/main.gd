@@ -44,6 +44,9 @@ func peer_connected(peer_id):
 	ping_player.rpc_id(peer_id,peer_id)
 
 func peer_disconnected(peer_id):
+	var time = Time.get_datetime_dict_from_system()
+	add_to_log("%d points [%d.%d.%d %d:%d.%d]" % [pointsdatabase.size(),time.year, time.month, time.day, time.hour, time.minute, time.second])
+	add_to_log("%s dissconected [%d.%d.%d %d:%d.%d]" % [str(database[peer_id].nickname),time.year, time.month, time.day, time.hour, time.minute, time.second])
 	remove_player.rpc(peer_id,"you got kicked from the server")
 	database.erase(peer_id) 
 	moderator_server.send_dict(database)
@@ -53,6 +56,8 @@ func share_player_properties(peer_id,nickname, color):
 	playerloadingprog[peer_id]=0
 	playerloadingstat[peer_id]="ready"
 	spawn_old_players.rpc_id(peer_id,database)
+	var time = Time.get_datetime_dict_from_system()
+	add_to_log("%s loading [%d.%d.%d %d:%d.%d]" % [nickname,time.year, time.month, time.day, time.hour, time.minute, time.second])
 	loading(peer_id,nickname, color, pointsdatabase)
 	
 
@@ -77,6 +82,11 @@ func loading(peer_id,nickname, color, pdt):
 				finished=true
 				playersp(peer_id,nickname, color)
 				print("DONE")
+				var time = Time.get_datetime_dict_from_system()
+				add_to_log("%s connected [%d.%d.%d %d:%d.%d]" % [nickname,time.year, time.month, time.day, time.hour, time.minute, time.second])
+				add_to_log("%d points [%d.%d.%d %d:%d.%d]" % [pointsdatabase.size(),time.year, time.month, time.day, time.hour, time.minute, time.second])
+
+				
 			else:
 				persantage = i*cut_per
 				finished=false
@@ -168,6 +178,12 @@ func save_pointdatabase():
 	var file = FileAccess.open("pointdatabase.bin", FileAccess.WRITE)
 	var content = pointsdatabase
 	file.store_var(content)
+	
+func add_to_log(txt):
+	var file_r = FileAccess.open("log.txt", FileAccess.READ).get_as_text()
+	var file_w = FileAccess.open("log.txt", FileAccess.WRITE)
+	file_w.store_string(file_r+"\n"+txt)
+	file_w.close()
 
 func load_pointdatabase():
 	var file = FileAccess.open("pointdatabase.bin", FileAccess.READ)

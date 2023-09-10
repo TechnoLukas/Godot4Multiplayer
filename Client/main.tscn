@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://e8xbpgk2y3i3"]
+[gd_scene load_steps=22 format=3 uid="uid://e8xbpgk2y3i3"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_j6oyd"]
 [ext_resource type="Shader" uid="uid://bq2eo8u2pu2f" path="res://main.tres" id="2_2x24l"]
+[ext_resource type="FontFile" uid="uid://bhh5npox5hdjq" path="res://resorces/PlayMeGamesReguler-1.ttf" id="3_6qb7r"]
 [ext_resource type="PackedScene" uid="uid://44h2o1w6qkqg" path="res://resorces/land.tscn" id="3_k6qj4"]
 
 [sub_resource type="Environment" id="Environment_o5wio"]
@@ -11,28 +12,52 @@ glow_intensity = 1.0
 glow_strength = 0.95
 glow_blend_mode = 0
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_24i3t"]
+render_priority = 0
+shader = ExtResource("2_2x24l")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yuyi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pdset"]
+bg_color = Color(0.207843, 0.286275, 0.305882, 0.858824)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1jfb3"]
+draw_center = false
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.470588, 0.8, 0.886275, 1)
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_u2u10"]
+bg_color = Color(0.470588, 0.8, 0.886275, 1)
+
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_lk1rc"]
-color = Color(0.415686, 0.415686, 0.415686, 1)
+color = Color(0.623529, 0.870588, 0.937255, 1)
 thickness = 5
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_voseq"]
-bg_color = Color(0.442911, 0.442911, 0.442911, 1)
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pxtt8"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_82y2s"]
-bg_color = Color(0, 0, 0, 0.686275)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e2msv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fgo8k"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f7xvf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_n8sxo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mqmdb"]
 bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_784s8"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 5
+border_color = Color(0.623529, 0.870588, 0.937255, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1ce73"]
+render_priority = 0
+shader = ExtResource("2_2x24l")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4hx1b"]
 render_priority = 0
@@ -46,7 +71,7 @@ radius = 9.6
 script = ExtResource("1_j6oyd")
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.735168, -0.253746, 0.628603, -0.0351182, 0.911798, 0.409135, -0.676975, -0.322858, 0.661413, 5, 3, 5)
+transform = Transform3D(0.735168, -0.253746, 0.628603, -0.0351182, 0.911798, 0.409135, -0.676975, -0.322858, 0.661414, 5, 3, 5)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_o5wio")
@@ -66,6 +91,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="background" type="ColorRect" parent="Menu"]
+material = SubResource("ShaderMaterial_24i3t")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -73,7 +99,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 scale = Vector2(0.999039, 1)
-color = Color(0.211765, 0.211765, 0.211765, 1)
+color = Color(0.152941, 0.152941, 0.152941, 0)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Menu"]
 layout_mode = 1
@@ -85,16 +111,212 @@ anchor_bottom = 0.5
 offset_left = -187.0
 offset_top = -116.0
 offset_right = 187.0
-offset_bottom = 199.0
+offset_bottom = 238.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 15
 
-[node name="joinbt" type="Button" parent="Menu/VBoxContainer"]
+[node name="Join" type="Control" parent="Menu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 50
+
+[node name="Window" type="Control" parent="Menu/VBoxContainer/Join"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/Join/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5yuyi")
+
+[node name="bg" type="Panel" parent="Menu/VBoxContainer/Join/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdset")
+
+[node name="glow" type="Panel" parent="Menu/VBoxContainer/Join/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1jfb3")
+
+[node name="Frame" type="Control" parent="Menu/VBoxContainer/Join"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-l" type="Panel" parent="Menu/VBoxContainer/Join/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-r" type="Panel" parent="Menu/VBoxContainer/Join/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b" type="Panel" parent="Menu/VBoxContainer/Join/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-t" type="Panel" parent="Menu/VBoxContainer/Join/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="LeftCorner" type="Control" parent="Menu/VBoxContainer/Join"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b4" type="Panel" parent="Menu/VBoxContainer/Join/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 5.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Join/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 109.0
+offset_bottom = 8.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="RightCorner" type="Control" parent="Menu/VBoxContainer/Join"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b6" type="Panel" parent="Menu/VBoxContainer/Join/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -8.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Join/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -5.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="joinbt" type="Button" parent="Menu/VBoxContainer/Join"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 7.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.623529, 0.870588, 0.937255, 1)
+theme_override_fonts/font = ExtResource("3_6qb7r")
+theme_override_font_sizes/font_size = 60
 text = "Join"
+flat = true
 
 [node name="addressinp" type="LineEdit" parent="Menu/VBoxContainer"]
 visible = false
@@ -107,13 +329,212 @@ alignment = 1
 
 [node name="HSeparator" type="HSeparator" parent="Menu/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = -5
+theme_override_constants/separation = 40
 theme_override_styles/separator = SubResource("StyleBoxLine_lk1rc")
 
-[node name="nicknamenp" type="LineEdit" parent="Menu/VBoxContainer"]
+[node name="Nickname" type="Control" parent="Menu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 50
+
+[node name="Window" type="Control" parent="Menu/VBoxContainer/Nickname"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/Nickname/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5yuyi")
+
+[node name="bg" type="Panel" parent="Menu/VBoxContainer/Nickname/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdset")
+
+[node name="glow" type="Panel" parent="Menu/VBoxContainer/Nickname/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1jfb3")
+
+[node name="Frame" type="Control" parent="Menu/VBoxContainer/Nickname"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-l" type="Panel" parent="Menu/VBoxContainer/Nickname/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-r" type="Panel" parent="Menu/VBoxContainer/Nickname/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b" type="Panel" parent="Menu/VBoxContainer/Nickname/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-t" type="Panel" parent="Menu/VBoxContainer/Nickname/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="LeftCorner" type="Control" parent="Menu/VBoxContainer/Nickname"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b4" type="Panel" parent="Menu/VBoxContainer/Nickname/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 5.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Nickname/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 109.0
+offset_bottom = 8.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="RightCorner" type="Control" parent="Menu/VBoxContainer/Nickname"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b6" type="Panel" parent="Menu/VBoxContainer/Nickname/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -8.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Nickname/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -5.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="nicknamenp" type="LineEdit" parent="Menu/VBoxContainer/Nickname"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -30.5
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.623529, 0.870588, 0.937255, 1)
+theme_override_fonts/font = ExtResource("3_6qb7r")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = SubResource("StyleBoxEmpty_pxtt8")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_e2msv")
+theme_override_styles/read_only = SubResource("StyleBoxEmpty_fgo8k")
 text = "Player"
 placeholder_text = "nickname"
 alignment = 1
@@ -121,16 +542,209 @@ max_length = 10
 
 [node name="Label" type="Label" parent="Menu/VBoxContainer"]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("3_6qb7r")
 theme_override_font_sizes/font_size = 21
 text = "min nickname lenth is 2"
 horizontal_alignment = 1
 
-[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer"]
+[node name="Color" type="Control" parent="Menu/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_voseq")
 
-[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/ColorRect"]
+[node name="Window" type="Control" parent="Menu/VBoxContainer/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/Color/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_5yuyi")
+
+[node name="bg" type="Panel" parent="Menu/VBoxContainer/Color/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_pdset")
+
+[node name="glow" type="Panel" parent="Menu/VBoxContainer/Color/Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1jfb3")
+
+[node name="Frame" type="Control" parent="Menu/VBoxContainer/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-l" type="Panel" parent="Menu/VBoxContainer/Color/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-r" type="Panel" parent="Menu/VBoxContainer/Color/Frame"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 1.0
+offset_right = 2.0
+offset_bottom = -1.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b" type="Panel" parent="Menu/VBoxContainer/Color/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-t" type="Panel" parent="Menu/VBoxContainer/Color/Frame"]
+custom_minimum_size = Vector2(0, 4)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_top = -2.0
+offset_right = -1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="LeftCorner" type="Control" parent="Menu/VBoxContainer/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b4" type="Panel" parent="Menu/VBoxContainer/Color/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 112.0
+offset_bottom = 5.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Color/LeftCorner"]
+custom_minimum_size = Vector2(4, 2)
+layout_mode = 1
+anchors_preset = -1
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 109.0
+offset_bottom = 8.0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="RightCorner" type="Control" parent="Menu/VBoxContainer/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="frame-b6" type="Panel" parent="Menu/VBoxContainer/Color/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -147.0
+offset_top = -8.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="frame-b5" type="Panel" parent="Menu/VBoxContainer/Color/RightCorner"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -150.0
+offset_top = -5.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_force_pass_scroll_events = false
+mouse_default_cursor_shape = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_u2u10")
+
+[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/Color"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_f7xvf")
+
+[node name="ColorRect" type="Panel" parent="Menu/VBoxContainer/Color/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -139,9 +753,9 @@ offset_bottom = 2.6
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_82y2s")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_n8sxo")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Menu/VBoxContainer/ColorRect"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Menu/VBoxContainer/Color/ColorRect"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -150,31 +764,47 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 3
 
-[node name="Label" type="Label" parent="Menu/VBoxContainer/ColorRect/HBoxContainer"]
+[node name="Label" type="Label" parent="Menu/VBoxContainer/Color/ColorRect/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.623529, 0.870588, 0.937255, 1)
+theme_override_fonts/font = ExtResource("3_6qb7r")
 theme_override_font_sizes/font_size = 50
 text = "  color:"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="Menu/VBoxContainer/ColorRect/HBoxContainer"]
+[node name="Panel" type="Panel" parent="Menu/VBoxContainer/Color/ColorRect/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_mqmdb")
 
-[node name="ColorPickerButton" type="ColorPickerButton" parent="Menu/VBoxContainer/ColorRect/HBoxContainer/Panel"]
+[node name="ColorPickerButton" type="ColorPickerButton" parent="Menu/VBoxContainer/Color/ColorRect/HBoxContainer/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = 13.0
+offset_top = 13.0
+offset_right = -13.0
+offset_bottom = -15.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_784s8")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_784s8")
+theme_override_styles/hover = SubResource("StyleBoxFlat_784s8")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_784s8")
+theme_override_styles/focus = SubResource("StyleBoxFlat_784s8")
 color = Color(1, 1, 1, 1)
+
+[node name="Menu3D" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Menu3D"]
+transform = Transform3D(0.735168, -0.253746, 0.628603, -0.0351182, 0.911798, 0.409135, -0.676975, -0.322858, 0.661413, 4, 2.3, 4)
+size = Vector3(10, 10, 0.23)
+material = SubResource("ShaderMaterial_1ce73")
 
 [node name="Notification" type="Control" parent="."]
 visible = false
@@ -236,7 +866,11 @@ offset_right = 207.0
 offset_bottom = 287.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.623529, 0.870588, 0.937255, 1)
+theme_override_colors/font_shadow_color = Color(0.0470588, 0.164706, 0.192157, 1)
+theme_override_constants/shadow_offset_x = 5
+theme_override_constants/shadow_offset_y = 3
+theme_override_fonts/font = ExtResource("3_6qb7r")
 theme_override_font_sizes/font_size = 56
 text = "loading %8
 please wait"
@@ -258,4 +892,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2, 0)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
 shape = SubResource("CylinderShape3D_aarql")
 
-[connection signal="pressed" from="Menu/VBoxContainer/joinbt" to="." method="_on_joinbt_pressed"]
+[connection signal="pressed" from="Menu/VBoxContainer/Join/joinbt" to="." method="_on_joinbt_pressed"]

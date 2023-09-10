@@ -1,11 +1,12 @@
 extends Node3D
 
 @onready var main_menu = $Menu
+@onready var main_menu_3d = $Menu3D
 @onready var notification_menu = $Notification
 @onready var loading_menu = $Loading
 
-@onready var nicknamenp = $Menu/VBoxContainer/nicknamenp
-@onready var colornp = $Menu/VBoxContainer/ColorRect/HBoxContainer/Panel/ColorPickerButton
+@onready var nicknamenp = $Menu/VBoxContainer/Nickname/nicknamenp
+@onready var colornp = $Menu/VBoxContainer/Color/ColorRect/HBoxContainer/Panel/ColorPickerButton
 
 @onready var progresslb = $Loading/progress
 
@@ -30,6 +31,7 @@ func _ready():
 func _on_joinbt_pressed():
 	if len(nicknamenp.text)>=2:
 		main_menu.hide()
+		main_menu_3d.hide()
 		#peer.create_client("ws://" + $Menu/VBoxContainer/addressinp.text + ":" + str(PORT))
 		#peer.create_client("ws://" + "ec2-16-171-197-200.eu-north-1.compute.amazonaws.com" + ":" + str(PORT))
 		#peer.create_client("wss://" + "www.godot-games.info:8080/")

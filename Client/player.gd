@@ -207,7 +207,7 @@ func _physics_process(delta):
 		voxel_delay_cr=0
 		
 	if removing and voxel_delay_cr>voxel_delay and camera_raycast.get_collider()!=null:
-		get_parent().get_parent().get_point_index(camera_raycast.get_collider().global_position,camera_raycast.get_collider())
+		#get_parent().get_parent().get_point_index(camera_raycast.get_collider().global_position,camera_raycast.get_collider())
 		voxel_delay_cr=0
 	if voxel_delay_cr<=voxel_delay:
 		voxel_delay_cr=voxel_delay_cr+1
@@ -287,15 +287,12 @@ func update_properties(n,c):
 	
 func update_self_properties():
 	if not is_multiplayer_authority(): return
-	invwd.visible=false
-	tagwd.visible=false
-	chat.visible=false
-	mesh.visible=false
+	if invwd: invwd.visible=false
+	if tagwd: tagwd.visible=false
+	if chat: chat.visible=false
+	if mesh: mesh.visible=false
 	
-	st_ui.visible=true
-	
-	
-	
+	if st_ui: st_ui.visible=true
 	
 func _on_message_input_text_submitted(new_text):
 	send_message_rpc.rpc(nicklabel.text,new_text,tagwd.get_node("nick").get("theme_override_colors/font_color"))
