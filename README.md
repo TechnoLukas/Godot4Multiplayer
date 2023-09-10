@@ -6,5 +6,11 @@ Written using WebSocket and using rpc due to lack of possibilities with sync nod
 
 You already can download it and copy to your project, because it has main functionalities like 3d character width movement, nickname, colors. 
 
-![image](https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/6121bb63-61a6-42ef-9ce5-d84a19239f61)
+<img width="333" alt="image" src="https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/f683f8c6-c96d-4e47-8441-b8ba6d9f0637">
+
+<img width="1360" alt="image" src="https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/5838c950-4d5b-4636-890f-1227ffeb4cbd">
+
+<img width="680" alt="image" src="https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/7472b2e5-0856-473f-a475-4605e79664ed">
+
+<img width="714" alt="image" src="https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/e55d78b2-c069-4501-bea1-eadd09b3f7d2">
 
