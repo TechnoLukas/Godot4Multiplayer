@@ -3,7 +3,11 @@ Headless + Client Multiplayer in Godot 4
 
 discord server for this project https://discord.gg/fuJCJFRX
 
-play: https://www.godot-games.info
+play: 'https://www.godot-games.info' the server is down, due to lack of activity
+
+My lightning talk about his project on godotcon 23 in Munich. (with time stamp 10:58)
+
+[![Watch the video](https://img.youtube.com/vi/6kT1spiOILE/0.jpg)](https://youtu.be/6kT1spiOILE?t=658)
 
 Written using WebSocket and using rpc due to lack of possibilities with sync nodes. 
 
