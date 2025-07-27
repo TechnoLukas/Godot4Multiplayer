@@ -1,7 +1,7 @@
 # Godot4Multiplayer
 Headless + Client Multiplayer in Godot 4
 
-discord server for this project https://discord.gg/fuJCJFRX
+discord server for this project [https://discord.gg/fuJCJFRX](https://discord.gg/SYYnWaPVXc)
 
 play: 'https://www.godot-games.info' the server is down, due to lack of activity
 
@@ -12,6 +12,7 @@ My 1min lightning talk about his project on godotcon 23 in Munich. (with time st
 Written using WebSocket and using rpc due to lack of possibilities with sync nodes. 
 
 You already can download it and copy to your project, because it has main functionalities like 3d character width movement, nickname, colors. 
+
 
 <img width="333" alt="image" src="https://github.com/TechnoLukas/Godot4Multiplayer/assets/110934679/f683f8c6-c96d-4e47-8441-b8ba6d9f0637">
 
